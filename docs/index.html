@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Reel Studio — one prompt, nine gates</title>
+<meta name="description" content="An OpenCode skill that turns one sentence into a finished vertical video, and refuses to deliver while a gate is red.">
+<meta property="og:title" content="Video Reel Studio">
+<meta property="og:description" content="One sentence in. A finished vertical video out. Nine audit gates block the delivery.">
+<meta property="og:image" content="assets/img/hero.jpg">
+<style>
+  :root{--bg:#0B0C0C;--ink:#F4F2EE;--mut:#9AA5A2;--acc:#19C3AE;--card:#101615;--line:#1E2927}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,system-ui,sans-serif;line-height:1.6}
+  a{color:var(--acc);text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  header{padding:28px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .brand{font-weight:800;letter-spacing:-.5px;font-size:20px}
+  .brand span{color:var(--acc)}
+  nav a{margin-left:22px;color:var(--mut);font-size:14px}
+  nav a:hover{color:var(--ink)}
+  .hero{padding:56px 0 24px}
+  .hero img{width:100%;border-radius:18px;border:1px solid var(--line);display:block}
+  h1{font-size:44px;line-height:1.1;letter-spacing:-1.5px;margin:26px 0 14px}
+  h1 .t{color:var(--acc)}
+  .lead{font-size:19px;color:var(--mut);max-width:760px}
+  .row{display:flex;gap:14px;flex-wrap:wrap;margin:26px 0 0}
+  .pill{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 14px;font-size:14px;color:#D8E2DF}
+  section{padding:54px 0;border-top:1px solid var(--line)}
+  h2{font-size:28px;letter-spacing:-.6px;margin-bottom:10px}
+  .sub{color:var(--mut);margin-bottom:26px;max-width:760px}
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .card video{width:100%;display:block;background:#000;aspect-ratio:9/16;object-fit:cover}
+  .card .meta{padding:14px 16px}
+  .card .meta b{display:block;font-size:16px}
+  .card .meta span{color:var(--mut);font-size:13px}
+  .card img{width:100%;display:block}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1px}
+  code,pre{font-family:Consolas,ui-monospace,monospace}
+  pre{background:#0E1312;border:1px solid var(--line);border-radius:14px;padding:20px;overflow:auto;font-size:14px;line-height:1.65}
+  .ok{color:var(--acc)}
+  .btn{display:inline-block;background:var(--acc);color:#062B27;font-weight:700;padding:13px 22px;border-radius:10px;margin-top:8px}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-left:10px}
+  footer{padding:36px 0;border-top:1px solid var(--line);color:var(--mut);font-size:14px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  @media(max-width:640px){h1{font-size:32px}.hero{padding-top:32px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Video Reel <span>Studio</span></div>
+    <nav>
+      <a href="#samples">Samples</a>
+      <a href="#gates">Gates</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/MostaDaoud/video-reel-studio">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <img src="assets/img/hero.jpg" alt="Video Reel Studio">
+    <h1>One sentence in.<br>A finished reel out — <span class="t">if the gates pass.</span></h1>
+    <p class="lead">An OpenCode skill that orchestrates cut, Arabic captions, motion, master, cover and thumbnails — then audits the result at nine checkpoints and refuses to deliver while one is red.</p>
+    <div class="row">
+      <div class="pill">9 audit gates</div>
+      <div class="pill">Arabic-first captions</div>
+      <div class="pill">Brand onboarding</div>
+      <div class="pill">Windows · macOS · Linux</div>
+      <div class="pill">MIT</div>
+    </div>
+    <div class="row">
+      <a class="btn" href="https://github.com/MostaDaoud/video-reel-studio">Get it on GitHub</a>
+      <a class="btn ghost" href="#install">Install</a>
+    </div>
+  </div>
+
+  <section id="samples">
+    <h2>What comes out</h2>
+    <p class="sub">Real output from this pipeline, not mockups. Every file below passed its gates.</p>
+    <div class="grid g3">
+      <div class="card">
+        <video src="assets/video/reel.mp4" poster="assets/img/reel-sheet.jpg" controls playsinline preload="none"></video>
+        <div class="meta"><b>73 s Arabic reel</b><span>captions · motion · 3D beat · cover · 28 MB</span></div>
+      </div>
+      <div class="card">
+        <video src="assets/video/motion.mp4" poster="assets/img/motion.jpg" controls playsinline preload="none"></video>
+        <div class="meta"><b>Motion film</b><span>60 fps · stage3D + bloom · no camera</span></div>
+      </div>
+      <div class="card">
+        <video src="assets/video/device3d.mp4" poster="assets/img/device3d.jpg" controls playsinline preload="none"></video>
+        <div class="meta"><b>Web explainer</b><span>real capture inside a 3D phone</span></div>
+      </div>
+      <div class="card">
+        <video src="assets/video/web-demo.mp4" poster="assets/img/web-demo.jpg" controls playsinline preload="none"></video>
+        <div class="meta"><b>Flat device demo</b><span>same capture, 2D compositor</span></div>
+      </div>
+      <div class="card">
+        <video src="assets/video/montage.mp4" poster="assets/img/montage.jpg" controls playsinline preload="none"></video>
+        <div class="meta"><b>Beat montage</b><span>120 BPM cut · 9:16</span></div>
+      </div>
+      <div class="card">
+        <img src="assets/img/brand-card.svg" alt="brand identity card">
+        <div class="meta"><b>Brand card</b><span>colours · type · tone · taboos · contrast checked</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gates">
+    <h2>Nine gates, fail-closed</h2>
+    <p class="sub">The interesting part is not that it renders. It is that it stops.</p>
+    <img src="assets/img/gates.jpg" alt="gate report" style="width:100%;border-radius:16px;border:1px solid var(--line)">
+    <div style="height:22px"></div>
+    <table>
+      <tr><th>Gate</th><th>Checks</th><th>Blocks</th></tr>
+      <tr><td><b>G-2</b> environment</td><td>python · ffmpeg · node · bash · Chrome · fonts · sibling skills</td><td class="ok">yes</td></tr>
+      <tr><td><b>G-1</b> brand</td><td>ink/bg ≥ 4.5 · acc/bg ≥ 3 · onAcc/acc ≥ 4.5 · font · caption style</td><td class="ok">yes</td></tr>
+      <tr><td><b>G1</b> source</td><td>readable video + audio, duration &gt; 1 s</td><td class="ok">yes</td></tr>
+      <tr><td><b>G2</b> cut</td><td>segments exist, cut duration matches</td><td class="ok">yes</td></tr>
+      <tr><td><b>G3</b> captions</td><td>first card ≤ 1.2 s · no empty cards · last inside video · ≤ 8 s · ≤ 9 words</td><td class="ok">yes</td></tr>
+      <tr><td><b>G4</b> frames</td><td>rendered = duration × 30 (±2)</td><td class="ok">yes</td></tr>
+      <tr><td><b>G5</b> audio</td><td>−15.5…−13 LUFS · true peak ≤ −1.0 dBTP</td><td class="ok">warn / yes</td></tr>
+      <tr><td><b>G6</b> package</td><td>≤ 29 MB · cover 1080×1920 · grid + phone preview · .srt</td><td class="ok">yes / warn</td></tr>
+      <tr><td><b>G7</b> safe zone</td><td>no text under Instagram's chrome (render twice + diff)</td><td class="ok">yes</td></tr>
+    </table>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <p class="sub">Prerequisites: Python 3.10+, FFmpeg, Node 18+, Google Chrome, Git. The production skills install separately (upstream, MIT).</p>
+    <pre><span style="color:#6F7B78"># 1 — the five production skills</span>
+git clone https://github.com/majedphotos/video-ad-editor /tmp/vae
+mkdir -p ~/.config/opencode/skills
+cp -r /tmp/vae/{video-ad-editor,montage-video,motion-video,podcast-video,thumbnail-video} ~/.config/opencode/skills/
+
+<span style="color:#6F7B78"># 2 — this skill</span>
+git clone https://github.com/MostaDaoud/video-reel-studio /tmp/vrs
+bash /tmp/vrs/install.sh --global
+
+<span style="color:#6F7B78"># 3 — prove the machine</span>
+python3 ~/.config/opencode/skills/video-reel-studio/scripts/preflight.py</pre>
+    <p class="sub" style="margin-top:22px">Then open OpenCode, drop a video, and say <b>«منتج الفيديو ده»</b>. It asks one question about your brand, and takes it from there.</p>
+  </section>
+
+  <footer>
+    <div>MIT © 2026 Mostafa Daoud · built on <a href="https://github.com/majedphotos/video-ad-editor">majedphotos/video-ad-editor</a></div>
+    <div><a href="https://github.com/MostaDaoud/video-reel-studio">Source</a></div>
+  </footer>
+</div>
+</body>
+</html>

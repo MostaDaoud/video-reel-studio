@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 1600px; height: 900px; background: #0B0C0C; color: #F4F2EE;
+         font-family: "Segoe UI", Tahoma, sans-serif; overflow: hidden; position: relative; }
+  .glow { position: absolute; width: 900px; height: 900px; right: -180px; top: -260px;
+          background: radial-gradient(circle, rgba(25,195,174,.20), rgba(25,195,174,0) 62%); }
+  .left { position: absolute; left: 84px; top: 132px; width: 760px; }
+  .kicker { display: inline-block; font-size: 20px; letter-spacing: 3px; color: #19C3AE;
+            border: 1px solid rgba(25,195,174,.45); border-radius: 999px; padding: 8px 18px; margin-bottom: 26px; }
+  h1 { font-size: 92px; line-height: .98; font-weight: 800; letter-spacing: -2px; }
+  h1 .t { color: #19C3AE; }
+  p.sub { margin-top: 24px; font-size: 30px; line-height: 1.35; color: #B9C4C1; max-width: 690px; }
+  .badges { margin-top: 40px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .b { font-size: 19px; color: #D8E2DF; border: 1px solid #23302D; background: #101615;
+       border-radius: 10px; padding: 10px 16px; }
+  .rule { position: absolute; left: 84px; bottom: 96px; width: 560px; height: 2px;
+          background: linear-gradient(90deg, #19C3AE, rgba(25,195,174,0)); }
+  .sig { position: absolute; left: 84px; bottom: 54px; font-size: 20px; color: #6F7B78; letter-spacing: 1px; }
+  .phones { position: absolute; right: 90px; top: 96px; width: 620px; height: 720px; }
+  .ph { position: absolute; border-radius: 26px; overflow: hidden; border: 1px solid rgba(255,255,255,.14);
+        box-shadow: 0 30px 80px rgba(0,0,0,.65); background: #000; }
+  .p1 { width: 300px; height: 600px; left: 60px; top: 40px; transform: rotate(-6deg); }
+  .p2 { width: 280px; height: 560px; left: 300px; top: 120px; transform: rotate(5deg); z-index: 2; }
+  .ph img { width: 100%; height: 100%; object-fit: cover; }
+</style></head><body>
+<div class="glow"></div>
+<div class="left">
+  <div class="kicker">OPENCODE SKILL · WINDOWS &amp; macOS</div>
+  <h1>Video Reel<br><span class="t">Studio</span></h1>
+  <p class="sub">One sentence in. A finished vertical video out.<br>
+  Brief, cut, captions, motion, master — with nine gates that block the delivery before you ever see it.</p>
+  <div class="badges">
+    <div class="b">9 audit gates</div>
+    <div class="b">Arabic captions</div>
+    <div class="b">Brand onboarding</div>
+    <div class="b">60 fps motion</div>
+  </div>
+</div>
+<div class="phones">
+  <div class="ph p1"><img src="../assets/img/hero-reel.jpg"></div>
+  <div class="ph p2"><img src="../assets/img/motion.jpg"></div>
+</div>
+<div class="rule"></div>
+<div class="sig">github.com/MostaDaoud/video-reel-studio</div>
+</body></html>

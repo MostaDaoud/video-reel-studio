@@ -1,0 +1,22 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local work — never publish renders or sources
+work/
+out/
+renders/
+*.log
+*.tmp
+
+# Keep the sample media that live under assets/
+!assets/video/*.mp4
