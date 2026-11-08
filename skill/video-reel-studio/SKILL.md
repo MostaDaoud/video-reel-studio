@@ -79,6 +79,7 @@ python scripts/preflight.py        # ماك: python3
 التفاصيل والأوامر الدقيقة ← `references/pipeline.md`.
 الأدوار ومتى تسلّم لوكيل ← `references/roles.md`.
 كل شرط بوابة وحدوده ← `references/gates.md`.
+**الاتجاه الفني:** قبل أول مشهد اختار ستايل من `styles/pack.json` (10) — `python scripts/style_pack.py apply "<work>" <id>` — الستايل يحكم الحركة والملمس، والبراند يحكم اللون ← `references/styles-adapted.md`.
 
 ## -1أ) الوكيل والموديل — قبل الهوية
 

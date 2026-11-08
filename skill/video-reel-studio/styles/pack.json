@@ -1,0 +1,116 @@
+{
+  "note": "حزمة ستايلات مقتبسة فكريًا من Lemo-Opuscar (MIT code / CC BY 4.0 films). كل تعريف هنا مكتوب لصيغة محرّكنا، مش منقول. الفيديوهات الأصلية ما اتنسخش.",
+  "credit": "Adapted from Lemo-Opuscar — https://github.com/lemomo-ai/lemo-opuscar (MIT code, CC BY 4.0 films). Original briefs by LemoLab.",
+  "styles": [
+    {
+      "id": "watercolor",
+      "name_ar": "ألوان مائية",
+      "name_en": "Watercolor",
+      "when": "قصة، مكان، إحساس دافئ — مش رقم ولا بيع.",
+      "palette": { "bg": "#F5F1E8", "ink": "#2B2A26", "acc": "#C1663F", "alt": "#5C7F86" },
+      "type": { "display": "Amiri Quran", "body": "IBM Plex Sans Arabic" },
+      "motion": ["bleed-in", "wash-dissolve", "slow-pan"],
+      "sound": "ورق + ماء، بلا إيقاع",
+      "scenes": ["مسحة لون تكشف العنوان", "حدود تتسيّل بين اللقطات", "نص يظهر كأنه اتكتب بفرشاة"]
+    },
+    {
+      "id": "swiss-grid",
+      "name_ar": "الشبكة السويسرية",
+      "name_en": "Swiss Grid",
+      "when": "إعلان فكرة، مقارنة، رقم واحد قوي.",
+      "palette": { "bg": "#0B0C0C", "ink": "#F4F2EE", "acc": "#19C3AE", "alt": "#7A8582" },
+      "type": { "display": "Inter", "body": "IBM Plex Sans Arabic" },
+      "motion": ["snap-grid", "counter", "hard-cut"],
+      "sound": "نقرات على النبضة",
+      "scenes": ["أعمدة تدخل من الحدود", "رقم يعدّ في خانة ثابتة", "سطر واحد يشيل الشاشة"]
+    },
+    {
+      "id": "blueprint",
+      "name_ar": "مخطط هندسي",
+      "name_en": "Blueprint",
+      "when": "شرح نظام، آلة، عملية — لما تحتاج تشوف «إزاي».",
+      "palette": { "bg": "#0E2A43", "ink": "#DFF1FF", "acc": "#7FD1FF", "alt": "#1D4A6B" },
+      "type": { "display": "Readex Pro", "body": "IBM Plex Sans Arabic" },
+      "motion": ["draw-path", "measure", "explode"],
+      "sound": "قلم على ورق، وشوشة خفيفة",
+      "scenes": ["خطوط ترتسم بمقياس", "أجزاء تتفكك وتتجمع", "أبعاد تظهر على الحواف"]
+    },
+    {
+      "id": "paper-cut",
+      "name_ar": "قصاصات ورق",
+      "name_en": "Paper Cut",
+      "when": "قصة بسيطة، تعليم أطفال، منتج ودود.",
+      "palette": { "bg": "#F1E7D8", "ink": "#20201D", "acc": "#D9614C", "alt": "#3F6E5B" },
+      "type": { "display": "Lalezar", "body": "IBM Plex Sans Arabic" },
+      "motion": ["pop-layer", "slide-paper", "drop-shadow"],
+      "sound": "قص ورق + طقطقة",
+      "scenes": ["طبقات تنزل واحدة ورا التانية", "شخصية تطلع من الإطار", "ظل ثابت يحرّك الإحساس"]
+    },
+    {
+      "id": "ascii-crt",
+      "name_ar": "شاشة قديمة",
+      "name_en": "ASCII / CRT",
+      "when": "برمجة، terminal، «ورا الكواليس» تقني.",
+      "palette": { "bg": "#050805", "ink": "#B6FFB0", "acc": "#39FF6A", "alt": "#123312" },
+      "type": { "display": "Inter", "body": "IBM Plex Sans Arabic" },
+      "motion": ["type-on", "scanline", "cursor-blink"],
+      "sound": "أزرار كيبورد + همهمة",
+      "scenes": ["نص يكتب حرف حرف", "سطر أوامر ينفّذ", "خطوط سكان تجري"]
+    },
+    {
+      "id": "isometric",
+      "name_ar": "أيزومتري",
+      "name_en": "Isometric",
+      "when": "شرح منتج، نظام، رحلة — محتاج مساحة ومقارنة.",
+      "palette": { "bg": "#0F1418", "ink": "#EDF3F6", "acc": "#F2B33D", "alt": "#2A3946" },
+      "type": { "display": "Tajawal", "body": "IBM Plex Sans Arabic" },
+      "motion": ["tile-in", "orbit", "stack"],
+      "sound": "بناء خشب/بلاستيك",
+      "scenes": ["بلاطات تتكوّن", "كاميرا تدور حول المجسّم", "طبقة تعلو طبقة"]
+    },
+    {
+      "id": "newsreel",
+      "name_ar": "أرشيف خمسينات",
+      "name_en": "Newsreel",
+      "when": "حكاية تاريخية، «زمان»، أو إثبات بمصدر قديم.",
+      "palette": { "bg": "#E9E1CF", "ink": "#191713", "acc": "#8C2B1E", "alt": "#6B6355" },
+      "type": { "display": "Aref Ruqaa", "body": "IBM Plex Sans Arabic" },
+      "motion": ["grain-flicker", "push-in", "whip-pan"],
+      "sound": "بروجيكتور + نويز",
+      "scenes": ["عنوان بعرض الشاشة", "صورة تتقدّم بجودتها الرديئة", "قطع سريع فوق النويز"]
+    },
+    {
+      "id": "chalkboard",
+      "name_ar": "سبورة",
+      "name_en": "Chalkboard",
+      "when": "درس، تفسير، تصحيح فكرة.",
+      "palette": { "bg": "#12211B", "ink": "#F2F0E6", "acc": "#E7C66B", "alt": "#1E3A2F" },
+      "type": { "display": "Tajawal", "body": "IBM Plex Sans Arabic" },
+      "motion": ["draw-path", "wipe", "handwrite"],
+      "sound": "طباشير",
+      "scenes": ["خطوط تتكتب بإيد", "مسحة تمسح فكرة", "سهم يوضّح العلاقة"]
+    },
+    {
+      "id": "data-story",
+      "name_ar": "حكاية رقم",
+      "name_en": "Data Story",
+      "when": "إحصائية، مقارنة، نمو — والرقم هو البطل.",
+      "palette": { "bg": "#0B0C0C", "ink": "#F4F2EE", "acc": "#19C3AE", "alt": "#FF6B6B" },
+      "type": { "display": "Inter", "body": "IBM Plex Sans Arabic" },
+      "motion": ["counter", "bar-grow", "line-draw"],
+      "sound": "تكّات عدّ",
+      "scenes": ["عمود ينمو لمستواه الحقيقي", "خط يرتسم مع مؤشر", "مقارنة عمودين تتضح"]
+    },
+    {
+      "id": "risograph",
+      "name_ar": "طباعة ريزو",
+      "name_en": "Risograph",
+      "when": "طاقة، ثقافة، شيء شبابي ومطبوع.",
+      "palette": { "bg": "#F7F1E3", "ink": "#1B1A17", "acc": "#E4572E", "alt": "#2E86AB" },
+      "type": { "display": "Lalezar", "body": "IBM Plex Sans Arabic" },
+      "motion": ["misregister", "overprint", "stamp"],
+      "sound": "طبع ومعدن",
+      "scenes": ["طبقتين لون بتزحزح", "نص ينطبع بختم", "شكل بيتكرر كورد"]
+    }
+  ]
+}

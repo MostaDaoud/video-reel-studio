@@ -64,6 +64,15 @@ $PY S/03_cut_zoom.py "W"
 
 ## 3) التصميم (G4b)
 
+**قبل أول مشهد:** اختار اتجاه فني وسجّله.
+
+```bash
+$PY S2/style_pack.py list
+$PY S2/style_pack.py apply "W" blueprint     # يكتب W/style.json (مش theme.json)
+```
+
+الستايل يحكم الحركة والملمس والإيقاع، والبراند (`theme.json`) يحكم اللون والخط. لو اتعارضا، اللون للبراند.
+
 ```bash
 $PY S/35_moves.py plan --title "…"      # بانك الحركات
 $PY S/11_behind_text.js "W" build 9 35 38
