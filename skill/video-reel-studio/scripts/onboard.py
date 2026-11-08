@@ -26,6 +26,7 @@ except Exception:
 HEX = re.compile(r"^#[0-9a-fA-F]{6}$")
 FONTS = ["Cairo", "IBM Plex Sans Arabic", "Noto Kufi Arabic", "Lalezar", "Readex Pro", "Tajawal", "Aref Ruqaa", "Inter"]
 CAPSTYLES = ["chunk", "line", "word", "boxed", "karaoke"]
+HOSTS = ["opencode", "claude-code", "codex", "cursor", "gemini-cli", "other"]
 
 
 def brand_dir():
@@ -88,6 +89,7 @@ def cmd_new(a):
         "bg": a.bg, "ink": a.ink, "acc": a.acc, "clay": a.clay or a.acc,
         "mut": a.mut, "onAcc": a.onacc or smart_onacc(a.acc),
         "font": a.font, "capstyle": a.capstyle,
+        "ai": {"host": a.ai_host, "model": a.model, "vision": a.vision, "context": a.context},
         "created": a.created or "",
     }
     res = checks(br)
@@ -135,6 +137,9 @@ def cmd_apply(a):
         "grid": False, "bar": True,
     }
     json.dump(theme, open(os.path.join(w, "theme.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    ai = br.get("ai") or {}
+    if ai:
+        json.dump(ai, open(os.path.join(w, "ai.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     md = ["# هوية %s" % br.get("name", a.slug), "",
           "- الهاندل: %s" % br.get("handle", "—"),
           "- الجمهور: %s" % br.get("audience", "—"),
@@ -142,9 +147,10 @@ def cmd_apply(a):
           "- النداء: %s" % br.get("cta", "—"),
           "- ممنوع: %s" % br.get("avoid", "—"),
           "- الألوان: bg %s · ink %s · acc %s · clay %s" % (br["bg"], br["ink"], br["acc"], br["clay"]),
-          "- الخط: %s · نمط الكابشن: %s" % (br["font"], br.get("capstyle", "chunk")), ""]
+          "- الخط: %s · نمط الكابشن: %s" % (br["font"], br.get("capstyle", "chunk")),
+          "- الوكيل: %s · الموديل: %s" % ((br.get("ai") or {}).get("host", "—"), (br.get("ai") or {}).get("model", "—")), ""]
     open(os.path.join(w, "brand.md"), "w", encoding="utf-8").write("\n".join(md))
-    print("✅ theme.json + brand.md →", w)
+    print("✅ theme.json + brand.md + ai.json →", w)
     return 0
 
 
@@ -166,7 +172,9 @@ def cmd_card(a):
         svg.append('<text x="%d" y="660" fill="%s" font-family="Cairo, sans-serif" font-size="24">%s</text>' % (x, br["ink"], label))
         svg.append('<text x="%d" y="692" fill="%s" font-family="Inter, monospace" font-size="20">%s</text>' % (x, br["mut"], col))
         x += 196
+    ai = br.get("ai") or {}
     rows = [("الجمهور", br.get("audience")), ("النبرة", br.get("tone")), ("النداء", br.get("cta")),
+            ("الوكيل", ai.get("host")), ("الموديل", ai.get("model")),
             ("ممنوع", br.get("avoid")), ("الخط", br.get("font")), ("نمط الكابشن", br.get("capstyle"))]
     y = 780
     for k, v in rows:
@@ -189,6 +197,9 @@ def cmd_check(a):
     for fg, bg, c, lvl in res:
         print("%-6s / %-6s  %5.2f  %s" % (fg, bg, c, lvl))
         bad += (lvl == "fail")
+    host = (br.get("ai") or {}).get("host")
+    if host and host not in HOSTS:
+        print("⚠️  وكيل غير معروف:", host)
     print("❌" if bad else "✅", "مشاكل:", bad)
     return 3 if bad else 0
 
@@ -215,6 +226,10 @@ def main():
     n.add_argument("--font", default="Cairo")
     n.add_argument("--capstyle", default="chunk")
     n.add_argument("--created", default="")
+    n.add_argument("--ai-host", default="opencode", choices=HOSTS)
+    n.add_argument("--model", default="")
+    n.add_argument("--vision", default="", choices=["", "yes", "no", "unknown"])
+    n.add_argument("--context", default="", choices=["", "32k", "200k", "unknown"])
     ap_ = sub.add_parser("apply"); ap_.add_argument("work"); ap_.add_argument("slug")
     c = sub.add_parser("card"); c.add_argument("slug"); c.add_argument("--out", default="")
     k = sub.add_parser("check"); k.add_argument("slug")

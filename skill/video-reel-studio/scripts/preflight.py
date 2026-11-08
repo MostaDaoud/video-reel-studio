@@ -134,6 +134,26 @@ def main():
     except Exception as e:
         row("مجلد الهويات", "fail", str(e)[:60], "صلّح صلاحيات المجلد أو استخدم --dir")
 
+    # وكيل المشروع (من علامة المجلد) + مطابقته لـai.json
+    markers = {".opencode": "opencode", ".claude": "claude-code", ".codex": "codex",
+               ".cursor": "cursor", ".gemini": "gemini-cli"}
+    cwd = os.getcwd()
+    found = [v for k, v in markers.items() if os.path.exists(os.path.join(cwd, k))]
+    row("وكيل المشروع", "pass" if found else "warn",
+        found[0] if found else "مش معروف من المجلد", "شغّل من جذر المشروع")
+    aij = os.path.join(cwd, "ai.json")
+    if found and os.path.exists(aij):
+        try:
+            ai = json.load(open(aij, encoding="utf-8"))
+            if ai.get("host") and ai["host"] != found[0]:
+                row("ملاءمة ai.json", "warn",
+                    "ai.json بيقول %s والمشروع %s" % (ai["host"], found[0]),
+                    "عدّل ai.json أو انقل المشروع")
+            else:
+                row("ملاءمة ai.json", "pass", ai.get("host", ""), "")
+        except Exception:
+            row("ملاءمة ai.json", "warn", "ملف غير صالح", "أعد onboard.py apply")
+
     print()
     icons = {"pass": "✅", "warn": "⚠️", "fail": "❌"}
     for r in ROWS:
