@@ -214,21 +214,66 @@ def loudness(path):
         return None
 
 
-def g_audio(w):
+# أهداف العلو حسب المنصة. القيم من مستودعات قاس عليها أصحابها، مش قانون منزّل:
+#   ig/tiktok −14 (كذلك EBU R128 في bestagentkits/motion-video-skill)
+#   bilibili −16 (sukai213/bilibili-ai-video، وcclank/lanshu-create-ai-presenter-video)
+#   douyin  −20.5 (Mr-funny/hbg-douyin-code-explainer-video)
+#   cinema  −23  (مرجع EBU R128 للبث؛ Mr-funny/hbg-life-simulation بيعمل −22.8 قريب منه)
+LOUD = {
+    "ig": -14.0, "tiktok": -14.0, "reels": -14.0, "shorts": -14.0,
+    "bilibili": -16.0, "douyin": -20.5, "cinema": -23.0,
+}
+
+
+def g_audio(w, platform="ig"):
     g = Gate("G5", "الصوت والتسليم")
     cand = [os.path.join(w, "ad-master-cover.mp4"), os.path.join(w, "ad-master.mp4"), os.path.join(w, "ad-final.mp4")]
     f = next((p for p in cand if os.path.exists(p)), None)
     if not f:
         g.add(BAD, "لا ملف نهائي (ad-master / ad-master-cover)", "شغّل 06b_master.sh")
         return g, None
+    target = LOUD.get(platform, -14.0)
     l = loudness(f)
     if not l:
         g.add(WARN, "تعذّر قياس العلو")
     else:
         i, tp = l
-        g.add(OK if -15.5 <= i <= -13.0 else WARN, "علو %.1f LUFS" % i, "شغّل 06b_master.sh")
+        g.add(OK if abs(i - target) <= 1.2 else WARN,
+              "علو %.1f LUFS (هدف %s %.1f ±1.2)" % (i, platform, target),
+              "شغّل 06b_master.sh أو 06c_loudfix.sh")
         g.add(OK if tp <= -1.0 else BAD, "الذروة %.1f dBTP" % tp, "اخفض الذروة (06c_loudfix.sh)")
     return g, f
+
+
+def g_black(final):
+    """G4b — فريمات سوداء / بداية سوداء.
+
+    من aijiduonadegou/Paper-Cut: افحص أول وآخر فريم وحول الانتقالات، ونزّل blackdetect
+    على الملف النهائي. أشهر عيب في الرندر أنه يبدأ قبل ما الأصول تحمّل.
+    """
+    g = Gate("G4c", "الفريم الأسود")
+    if not final:
+        g.add(WARN, "لا ملف نهائي — تخطّي")
+        return g
+    r = run(["ffmpeg", "-hide_banner", "-nostats", "-i", final, "-an",
+             "-vf", "blackdetect=d=0.12:pix_th=0.10", "-f", "null", "-"])
+    runs = [(float(a), float(b)) for a, b in
+            re.findall(r"black_start:([\d.]+)\s+black_end:([\d.]+)", r.stderr or "")]
+    if not runs:
+        g.add(OK, "لا فريمات سوداء")
+        return g
+    worst = max(runs, key=lambda t: t[1] - t[0])
+    lead = [t for t in runs if t[0] < 0.6]
+    if lead:
+        g.add(BAD, "الفيديو يبدأ أسود عند %.2f ث (%.2f ث)" % (lead[0][0], lead[0][1] - lead[0][0]),
+              "أجّل أول مشهد أو حمّل الأصول قبل الرندر")
+    if worst[1] - worst[0] >= 0.6:
+        g.add(BAD, "أسود %.2f ث عند %.2f" % (worst[1] - worst[0], worst[0]),
+              "افتح sheet.jpg حوالين اللحظة وصلّح المشهد")
+    elif worst[1] - worst[0] >= 0.25:
+        g.add(WARN, "أسود %.2f ث عند %.2f" % (worst[1] - worst[0], worst[0]))
+    return g
+
 
 
 def g_package(w, final, maxmb):
@@ -271,6 +316,8 @@ def main():
     ap.add_argument("work")
     ap.add_argument("--safe", action="store_true", help="يشغّل 08_safe_check.js (أبطأ)")
     ap.add_argument("--maxmb", type=float, default=29)
+    ap.add_argument("--platform", default="ig", choices=sorted(LOUD),
+                    help="هدف العلو: ig/tiktok/reels/shorts −14 · bilibili −16 · douyin −20.5 · cinema −23")
     ap.add_argument("--json", default="gates.json")
     a = ap.parse_args()
     w = os.path.abspath(a.work)
@@ -282,9 +329,10 @@ def main():
     cut_dur = dur_of(os.path.join(w, "cutz.mp4"))
     g3 = g_captions(w, cut_dur)
     g4 = g_frames(w, cut_dur)
-    g5, final = g_audio(w)
+    g5, final = g_audio(w, a.platform)
+    g4c = g_black(final)
     g6 = g_package(w, final, a.maxmb)
-    gates = [g_env_r, g0, g1, g2, g3, g4, g5, g6] + ([g_safe(w)] if a.safe else [])
+    gates = [g_env_r, g0, g1, g2, g3, g4, g4c, g5, g6] + ([g_safe(w)] if a.safe else [])
 
     rows, blocked = [], 0
     for g in gates:
