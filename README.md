@@ -6,7 +6,7 @@
 
 **One sentence in. A finished vertical video out — and it refuses to hand it over while a gate is red.**
 
-An OpenCode skill that orchestrates a complete short-form video pipeline: brief → cut → Arabic captions → motion graphics → master → cover → thumbnails. It does not draw a single frame itself; it drives the five production skills underneath it and **audits the result at ten checkpoints** before the file reaches you.
+An OpenCode skill that orchestrates a complete short-form video pipeline: brief → cut → Arabic captions → motion graphics → master → cover → thumbnails. It does not draw a single frame itself; it drives the five production skills underneath it and **audits the result at eleven checkpoints** before the file reaches you.
 
 `Windows` · `macOS` · `Linux` · `Arabic-first` · `no cloud` · `MIT`
 
@@ -16,12 +16,12 @@ An OpenCode skill that orchestrates a complete short-form video pipeline: brief 
 
 Every video tool can produce *a* file. Almost none can tell you whether the file is fit to publish. This one can:
 
-- **Ten gates, fail-closed.** Missing frames, a caption after the video ends, a clipped headline, a −0.9 dBTP peak, a 62 MB delivery — each one stops the run with evidence and the exact fix.
+- **Eleven gates, fail-closed.** Missing frames, a caption after the video ends, a clipped headline, a −0.9 dBTP peak, a 62 MB delivery — each one stops the run with evidence and the exact fix.
 - **One prompt, no choreography.** You say «منتج الفيديو ده». It writes a brief, picks the mode, runs the pipeline, delegates the Arabic read and the visual read, and comes back with a file and a gate report.
 - **Brand once, reused forever.** Optional onboarding captures colours, font, tone, CTA and taboos into a brand file; every later video applies it with one command and a contrast gate.
 
 <p align="center">
-  <img src="assets/img/gates.jpg" alt="gate report: ten gates green, blocked 0" width="100%">
+  <img src="assets/img/gates.jpg" alt="gate report: eleven gates, one warn, blocked 0" width="100%">
 </p>
 
 ---
@@ -129,7 +129,7 @@ Every phase has a gate. If one fails: **one targeted fix, re-check that gate onl
 
 ---
 
-## The ten gates
+## The eleven gates
 
 | gate | checks | blocks |
 |---|---|---|
@@ -178,7 +178,7 @@ skill/video-reel-studio/
     onboarding.md           the seven brand questions
   scripts/
     preflight.py           environment check (G-2)
-    gate_runner.py         the ten gates (G-2 … G7, incl. G4c black frames)
+    gate_runner.py         the eleven gates (G-2 … G7, incl. G4c black frames)
     onboard.py             brand list/new/apply/check/card
   assets/brief.template.json
 install.sh · install.ps1

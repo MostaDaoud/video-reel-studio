@@ -57,7 +57,7 @@ Four projects come up constantly when people look for "agent video". They solve 
 
 **Why it matters to us.** Our category ("Short-form & talking-head", and partly "Editing & post-production") is exactly where a person looking for this repo would browse. A card there is worth more than another badge here.
 
-**Action:** submit a card describing this skill — one prompt, ten gates, Arabic-first, Windows + macOS — with our licence and the honest limitation that podcast mode needs two cameras.
+**Action:** submit a card describing this skill — one prompt, eleven gates, Arabic-first, Windows + macOS — with our licence and the honest limitation that podcast mode needs two cameras.
 
 ---
 
@@ -77,6 +77,74 @@ Four projects come up constantly when people look for "agent video". They solve 
 | To browse what agents can do in video at all | the two awesome lists |
 
 ---
+
+## Addition: `sarpstar/cinecode` (outside the catalogue)
+
+Not in the 184 — pointed at directly. Read at README + `SKILL.md` + `scripts/qc.py` + tree level.
+
+| | |
+|---|---|
+| ★ / forks | **1,521 / 281** in five days (created 2026-11-03) |
+| licence | **MIT** (plus `styles/LICENSE-lemo-opuscar` for the adapted styles) |
+| size | 168 files · 13.7 MB · 39 scripts · 61 styles · 24 references · CI on every push |
+| what it makes | **films written in code** — short films, YouTube essays, ads, explainers, music videos. Canvas 2D or three.js, sound designed in the same file |
+| agents | Claude Code (desktop, VS Code, terminal) and Cursor |
+| language | English and **Turkish** — including a banned-cliché list in both |
+
+**This is the strongest neighbour I have read.** It is deeper than this repo on craft: a named
+camera and transition vocabulary, a typography library (`references/type-library.json`), layered
+sound design, 61 styles, `tests/` over three files with a GitHub Actions workflow.
+
+**It is not the same product, and that is the useful part.** They generate every frame from code;
+we cut real footage and caption it in Arabic. Their pipeline starts from a script with no footage;
+ours starts from `src.mov`. Their gate story also assumes motion is always coming.
+
+### What it has that we did not
+
+`scripts/qc.py` runs eleven mechanical checks on the rendered file. We had two of them:
+
+| check | cinecode | ours before | ours now |
+|---|---|---|---|
+| motion in the opening (the hook rule) | `qc.py hook` — FAIL if the first 2 s are still | — | **G4d**, closed |
+| black intervals | `qc.py black` | G4c | G4c |
+| frozen intervals ≥ 1.5 s | `qc.py freeze` | — | deferred — holds are legitimate in motion graphics, so this needs a per-mode rule, not one threshold |
+| exact duplicate consecutive frames | `qc.py dup` | — | deferred, same reason as freeze |
+| the same picture again 6 s later | `qc.py repeats` | a written rule | deferred — needs the renderer to export a frame digest |
+| mean lightness / % very dark | `qc.py bright` | — | not adopted: our covers are brand-locked and G-1 already rules on colour |
+| hard cuts, loudness, contact sheets | `qc.py cuts/loud/sheet` | G5 + `sheet.jpg` | unchanged |
+
+### What was taken
+
+**One gate: G4d, "the open must move."** Implemented here from scratch as
+`tblend=all_mode=difference,signalstats` → mean frame difference + time to first movement,
+normalised to 30 fps so a 60 fps film is not scored on half the per-frame delta.
+
+Thresholds came from measuring our own artefacts, not from copying theirs:
+
+| file | first movement |
+|---|---:|
+| real reel `ad-master-cover.mp4` | **0.83 s** → warn |
+| motion film `final-nobed.mp4` (60 fps) | 0.15 s → pass |
+| montage | 0.00 s → pass |
+| synthetic still | never → **fail** |
+
+So the real reel now reports `⚠️ G4d أول حركة عند 0.83 ث`. That is the gate finding something true
+about a file we shipped, which is the point of having it.
+
+### What was not taken, and why
+
+- **Their engine.** Porting `make.py` (106 KB) + `guard.py` (103 KB) means adopting a second renderer
+  and two Claude-specific hooks. We already render HyperFrames.
+- **Their hook enforcement.** The guard is registered through Claude Code's exec-form hooks and says
+  `GUARD OFF` when it does not load. We have no hooks; our gate runner is called explicitly and
+  exits non-zero, which works on any host.
+- **Their language work.** No mention of Arabic, RTL or bidi anywhere in the repo — same gap as every
+  other neighbour. Turkish typography is solved there; Arabic shaping and bidi are not.
+- **Their styles.** 61 of them, and `styles/LICENSE-lemo-opuscar` shows they adapted the same Lemo
+  catalogue we did. Our ten are restated in our grammar; taking theirs would mean taking their engine.
+
+**Credit:** the hook rule is their idea. Nothing from their repository is copied here; the metric,
+the fps normalisation and all four thresholds were measured on our files.
 
 ## Appendix — scan of our two categories (56 repos)
 

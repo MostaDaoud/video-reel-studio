@@ -225,6 +225,49 @@ LOUD = {
 }
 
 
+def g_open(final):
+    """G4d — الافتتاحية: لازم الصورة تتحرك في أول ثانيتين.
+
+    متوسط |Δ| لكل فريم من tblend+signalstats، معوّض على 30 فريم/ث.
+    العتبات من قياس على 4 ملفات حقيقية عندنا (0.00 / 0.15 / 0.83 / never).
+    الفكرة من sarpstar/cinecode (scripts/qc.py: hook)، والأرقام قسناها هنا.
+    """
+    g = Gate("G4d", "الافتتاحية")
+    if not final:
+        g.add(WARN, "لا ملف نهائي — تخطّي")
+        return g
+    p = probe(final)
+    fps = 30.0
+    try:
+        v = [s for s in p["streams"] if s["codec_type"] == "video"][0]
+        num, _, den = (v.get("r_frame_rate") or "30/1").partition("/")
+        fps = float(num) / float(den or 1) or 30.0
+    except Exception:
+        pass
+    thr = 1.0 * (30.0 / fps)
+    r = run(["ffmpeg", "-hide_banner", "-nostats", "-t", "3", "-i", final, "-an",
+             "-vf", "tblend=all_mode=difference,signalstats,"
+                    "metadata=print:key=lavfi.signalstats.YAVG",
+             "-f", "null", "-"])
+    vals = [float(x) for x in re.findall(r"lavfi\.signalstats\.YAVG=([\d.]+)", r.stderr or "")]
+    if not vals:
+        g.add(WARN, "تعذّر قياس الحركة")
+        return g
+    i = next((k for k, x in enumerate(vals) if x >= thr), None)
+    if i is None:
+        g.add(BAD, "الصورة ثابتة أول 3 ثواني", "حرّك أول مشهد أو قصّ ثانية من البداية")
+        return g
+    t = i / fps
+    msg = "أول حركة عند %.2f ث" % t
+    if t > 2.0:
+        g.add(BAD, msg, "أول ثانيتين هما اللي يقرر المشاهد يكمل — حرّك من الفريم الأول")
+    elif t > 0.8:
+        g.add(WARN, msg, "حرّك قبل 0.8 ث لو تقدر")
+    else:
+        g.add(OK, msg)
+    return g
+
+
 def g_audio(w, platform="ig"):
     g = Gate("G5", "الصوت والتسليم")
     cand = [os.path.join(w, "ad-master-cover.mp4"), os.path.join(w, "ad-master.mp4"), os.path.join(w, "ad-final.mp4")]
@@ -331,8 +374,9 @@ def main():
     g4 = g_frames(w, cut_dur)
     g5, final = g_audio(w, a.platform)
     g4c = g_black(final)
+    g4d = g_open(final)
     g6 = g_package(w, final, a.maxmb)
-    gates = [g_env_r, g0, g1, g2, g3, g4, g4c, g5, g6] + ([g_safe(w)] if a.safe else [])
+    gates = [g_env_r, g0, g1, g2, g3, g4, g4c, g4d, g5, g6] + ([g_safe(w)] if a.safe else [])
 
     rows, blocked = [], 0
     for g in gates:
