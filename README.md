@@ -220,4 +220,6 @@ MIT © 2026 Mostafa Daoud.
 
 Built on top of [`majedphotos/video-ad-editor`](https://github.com/majedphotos/video-ad-editor) (MIT) and its four sibling skills — the cutter, the caption engine, the motion engine and the renderer are theirs. This repository adds the orchestrator, the gate system, the brand layer, and the cross-platform packaging.
 
+Per-component notices — the upstream skills, the art-direction styles and the render engine — are in [THIRD_PARTY.md](THIRD_PARTY.md).
+
 If you use it, the thing to keep is the refusal: **no green gates, no delivery.**
