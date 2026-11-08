@@ -75,3 +75,55 @@ Four projects come up constantly when people look for "agent video". They solve 
 | A specific art-directed look from a catalogue of 66 | Lemo-Opuscar, then bring the brief here |
 | To keep editing a timeline by hand, with an agent beside you | OpenChatCut (or CapCut via `40_capcut.py` today) |
 | To browse what agents can do in video at all | the two awesome lists |
+
+---
+
+## Appendix — scan of our two categories (56 repos)
+
+**Method, stated plainly.** I read the two catalogue pages of
+[awesome-agent-video-skills](https://github.com/clonn/awesome-agent-video-skills) that this repo would sit in —
+*Short-form & talking-head* (19) and *Editing & post-production* (37). **56 rows total.** I judged each repo from its
+**one-line catalogue description only**; I did not open the repos. Anything below is "stated", not "verified".
+
+### What the 56 look like
+
+| | count |
+|---|---|
+| state some form of check, review or approval | **10** |
+| non-commercial licence (PolyForm-NC / CC-BY-NC) | **6** |
+| **no licence file at all** (default copyright — not free to use) | **7** |
+| MIT / Apache-2.0 / AGPL-3.0 | 41 |
+
+So in the exact categories where this skill competes, **13 of 56 are not usable in client work** without asking the author.
+
+### The ten that check something
+
+| repo | ★ | licence | what it states | closest to us |
+|---|---:|---|---|---|
+| [YeJe-cpu/SeeCut](https://github.com/YeJe-cpu/SeeCut) | 260 | **NC** | "checks its own output with a video model" | **G4b** — but model judgement, not a threshold |
+| [Fagan1024/smart-video-editor](https://github.com/Fagan1024/smart-video-editor) | 9 | MIT | "analyses sampled frames with a vision model, drops unusable takes" | **G4b** visual audit |
+| [krusemediallc/video-editor-agent](https://github.com/krusemediallc/video-editor-agent) | 26 | **none** | "frame-level QA" | **G4** frames |
+| [erduo1998-cell/erduo-broll-loop-engineering](https://github.com/erduo1998-cell/erduo-broll-loop-engineering) | 209 | MIT | "multi-role review loops" | our fresh-context audit |
+| [qingyunAGI/qingyun-cine-skill](https://github.com/qingyunAGI/qingyun-cine-skill) | 10 | **none** | "rendering only after user approval" | gate hold before render |
+| [PoetCoderJun/MotionTalk](https://github.com/PoetCoderJun/MotionTalk) | 12 | **NC** | "after the user approves a director plan" | gate hold before render |
+| [jaxxchen003/book-video-factory](https://github.com/jaxxchen003/book-video-factory) | 105 | MIT | "auditable evidence, approvals" | evidence trail |
+| [yuwenbin121/book-video-production-skill](https://github.com/yuwenbin121/book-video-production-skill) | 17 | MIT | "fact-checked" | content gate |
+| [leancoderkavy/premiere-pro-mcp](https://github.com/leancoderkavy/premiere-pro-mcp) | 347 | MIT | "export checks" | **G6** package |
+| [Samin12/samin-reel-engine-plugin](https://github.com/Samin12/samin-reel-engine-plugin) | 9 | custom | "editing and review" | vague |
+
+### What this does and does not prove
+
+**It narrows our claim, honestly.** Ten of 56 mention a check — so "nobody checks" would be false. What none of the ten
+states is a **deterministic threshold set**: rendered frames equal to duration × fps, LUFS and true peak, brand contrast
+ratios, a safe-zone raster diff, package size, environment readiness. The three closest (SeeCut, Fagan, krusemedia) check
+with **a model's judgement**, which is a different instrument: it can be argued with.
+
+So the accurate sentence is:
+
+> Ten of the 56 neighbouring repos check their output. None of them states machine-checkable thresholds that block delivery.
+
+**Second finding, more useful than the first:** the licence field is the real filter. Two of the three closest
+neighbours are non-commercial or unlicensed, which means even a borrowed idea has to be re-implemented, not imported.
+
+**Caveat that stays attached:** descriptions lie by omission. A repo can have excellent gates and not mention them in one
+line. This appendix is a map of what is *claimed*, and it should be re-run before anyone quotes it as a survey.
