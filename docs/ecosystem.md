@@ -111,19 +111,34 @@ So in the exact categories where this skill competes, **13 of 56 are not usable 
 | [leancoderkavy/premiere-pro-mcp](https://github.com/leancoderkavy/premiere-pro-mcp) | 347 | MIT | "export checks" | **G6** package |
 | [Samin12/samin-reel-engine-plugin](https://github.com/Samin12/samin-reel-engine-plugin) | 9 | custom | "editing and review" | vague |
 
-### What this does and does not prove
+### Opened the three closest — what the check actually is
 
-**It narrows our claim, honestly.** Ten of 56 mention a check — so "nobody checks" would be false. What none of the ten
-states is a **deterministic threshold set**: rendered frames equal to duration × fps, LUFS and true peak, brand contrast
-ratios, a safe-zone raster diff, package size, environment readiness. The three closest (SeeCut, Fagan, krusemedia) check
-with **a model's judgement**, which is a different instrument: it can be argued with.
+| repo | verdict | evidence from its README |
+|---|---|---|
+| [krusemediallc/video-editor-agent](https://github.com/krusemediallc/video-editor-agent) | **mechanical** | "edits ... **QA'd frame by frame and in dB**"; its engine "verifies the RENDERED file (frames + dB + seams)"; storyboard coverage; *"unavailable checks are not labeled a clean pass"* |
+| [YeJe-cpu/SeeCut](https://github.com/YeJe-cpu/SeeCut) | **hybrid** | "each version **first passes hard-defect checks**, then pairwise-compares against the previous"; calibrated judge, positions swapped, max 3 versions, must show visible improvement |
+| [Fagan1024/smart-video-editor](https://github.com/Fagan1024/smart-video-editor) | **model judgement** (selection, not delivery) | per-frame vision scoring → EDL. One objective check in the whole repo: a font-fallback **PSNR** test, after a vision model mis-read a font |
 
-So the accurate sentence is:
+### Correction — my first sentence was wrong
 
-> Ten of the 56 neighbouring repos check their output. None of them states machine-checkable thresholds that block delivery.
+The appendix above first said *"none states machine-checkable thresholds."* That is **wrong** for krusemediallc and too
+strong for SeeCut. Both check the rendered file with numbers.
 
-**Second finding, more useful than the first:** the licence field is the real filter. Two of the three closest
-neighbours are non-commercial or unlicensed, which means even a borrowed idea has to be re-implemented, not imported.
+What survives is narrower, and now defensible:
 
-**Caveat that stays attached:** descriptions lie by omission. A repo can have excellent gates and not mention them in one
-line. This appendix is a map of what is *claimed*, and it should be re-run before anyone quotes it as a survey.
+> At least one neighbour runs a mechanical QA pass on the rendered MP4 — frames, dB, seams — and refuses to call a
+> skipped check a pass. The difference here is **which gates**, not **whether gates**: Arabic caption timing and
+> bidi, brand contrast ratios, safe-zone raster diff against Instagram's chrome, package size, environment readiness —
+> plus Windows support and an open licence.
+
+**The licence still bites:** krusemediallc has **no licence file** (all rights reserved by default), SeeCut is
+**non-commercial**, Fagan is **MIT**. So of the three, only Fagan's ideas are safely borrowable — and its best idea is
+already in our vocabulary: *test the thing mechanically when a model's judgement is the unreliable part.*
+
+**Still true across all three:** none mentions Arabic, RTL or bidi. All three assume a single-script pipeline where
+caption timing is a solved problem. That is where this repo is actually alone.
+
+### Caveat that stays attached
+
+Even now this is a README-level audit of three repos, not a code review. A claim like "verifies frames + dB + seams"
+is the author's description of their own engine; it was not executed here.
