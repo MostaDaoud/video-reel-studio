@@ -57,7 +57,7 @@ Four projects come up constantly when people look for "agent video". They solve 
 
 **Why it matters to us.** Our category ("Short-form & talking-head", and partly "Editing & post-production") is exactly where a person looking for this repo would browse. A card there is worth more than another badge here.
 
-**Action:** submit a card describing this skill — one prompt, nine gates, Arabic-first, Windows + macOS — with our licence and the honest limitation that podcast mode needs two cameras.
+**Action:** submit a card describing this skill — one prompt, ten gates, Arabic-first, Windows + macOS — with our licence and the honest limitation that podcast mode needs two cameras.
 
 ---
 
