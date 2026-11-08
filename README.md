@@ -198,6 +198,22 @@ install.sh · install.ps1
 
 ---
 
+## Related work — and what we deliberately don't include
+
+| project | what it is | relation to this repo |
+|---|---|---|
+| [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) | 66 code-drawn film **styles**, each a `STYLE.md` + a demo film | art-direction menu we borrow *briefs* from, never code or frames |
+| [0xsline/OpenChatCut](https://github.com/0xsline/OpenChatCut) | local-first **editor** with a real timeline, driven by agents over MCP | the manual-edit escape hatch — we ship a finished MP4, it ships an editable project |
+| [athemeroy/awesome-claude-5-5-videos](https://github.com/athemeroy/awesome-claude-5-5-videos) | **research + gallery**: 424 source posts, measured style/colour/cost | evidence for production choices, not a dependency |
+| [clonn/awesome-agent-video-skills](https://github.com/clonn/awesome-agent-video-skills) | **directory** of 184 agent video skills with licence + safety cards | where this repo belongs, and a map of the neighbours |
+
+None of them is vendored: three licences (CC BY 4.0, AGPL-3.0, MIT) and none of them needs to live in this tree.
+The full assessment — what each does well, where we differ, and the one integration worth building later — is in **[docs/ecosystem.md](docs/ecosystem.md)**.
+
+**Choosing between them:** finished gated reel → this repo · a specific art-directed look → Lemo-Opuscar, then bring the brief here · a timeline you keep editing → OpenChatCut (or CapCut via `40_capcut.py` today) · browsing the field → the two lists.
+
+---
+
 ## Credits & license
 
 MIT © 2026 Mostafa Daoud.
