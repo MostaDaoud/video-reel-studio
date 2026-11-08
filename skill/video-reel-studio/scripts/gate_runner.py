@@ -22,7 +22,7 @@ try:
 except Exception:
     pass
 
-OK, BAD, WARN = "pass", "fail", "warn"
+OK, BAD, WARN, NA = "pass", "fail", "warn", "na"
 
 
 def run(cmd, cwd=None):
@@ -66,6 +66,10 @@ class Gate:
         if WARN in states:
             return WARN
         return OK
+
+    def skip(self, why):
+        """مش مطلوب لنوع المشروع ده — مش فشل، ومش تجاهل صامت."""
+        self.items.append({"state": NA, "msg": why, "fix": ""})
 
 
 def g_env():
@@ -112,8 +116,11 @@ def g_theme(w):
     return g
 
 
-def g_source(w):
+def g_source(w, kind="reel"):
     g = Gate("G1", "المصدر والوسائط")
+    if kind != "reel":
+        g.skip("مش مطلوب لنوع %s — مفيش src.mov" % kind)
+        return g
     src = os.path.join(w, "src.mov")
     if not os.path.exists(src):
         g.add(BAD, "src.mov غير موجود", "انسخ الفيديو إلى <work>/src.mov")
@@ -131,8 +138,11 @@ def g_source(w):
     return g
 
 
-def g_cut(w):
+def g_cut(w, kind="reel"):
     g = Gate("G2", "خطة القص")
+    if kind != "reel":
+        g.skip("مش مطلوب لنوع %s — مفيش cut.json" % kind)
+        return g
     cut = os.path.join(w, "cut.json")
     cutz = os.path.join(w, "cutz.mp4")
     if not os.path.exists(cut):
@@ -153,10 +163,13 @@ def g_cut(w):
     return g
 
 
-def g_captions(w, cut_dur):
+def g_captions(w, cut_dur, kind="reel"):
     g = Gate("G3", "الكابشن")
     p = os.path.join(w, "caps.json")
     if not os.path.exists(p):
+        if kind != "reel":
+            g.skip("مفيش caps.json — نوع %s من غير كابشن محروق" % kind)
+            return g
         g.add(BAD, "caps.json غير موجود", "شغّل 02_captions.py")
         return g
     try:
@@ -185,8 +198,11 @@ def g_captions(w, cut_dur):
     return g
 
 
-def g_frames(w, cut_dur):
+def g_frames(w, cut_dur, kind="reel"):
     g = Gate("G4", "رسم الفريمات")
+    if kind != "reel":
+        g.skip("مش مطلوب لنوع %s — الريل هو اللي بيرسم out/*.jpg" % kind)
+        return g
     out = os.path.join(w, "out")
     if not os.path.isdir(out):
         g.add(BAD, "مجلد out غير موجود", "شغّل 04_render_frames.js all")
@@ -299,7 +315,7 @@ def g_black(final):
         g.add(WARN, "لا ملف نهائي — تخطّي")
         return g
     r = run(["ffmpeg", "-hide_banner", "-nostats", "-i", final, "-an",
-             "-vf", "blackdetect=d=0.12:pix_th=0.10", "-f", "null", "-"])
+             "-vf", "blackdetect=d=0.12:pix_th=0.02", "-f", "null", "-"])
     runs = [(float(a), float(b)) for a, b in
             re.findall(r"black_start:([\d.]+)\s+black_end:([\d.]+)", r.stderr or "")]
     if not runs:
@@ -354,6 +370,43 @@ def g_safe(w):
     return g
 
 
+BANDS = [
+    ("فوق (y 0–150)", "crop=1080:150:0:0"),
+    ("تحت (y 1620–1920)", "crop=1080:300:0:1620"),
+    ("يمين (x 950، y 1100–1750)", "crop=130:650:950:1100"),
+]
+
+
+def g_safe_film(final, dur, bg="#0B0C0C"):
+    """G7 لفيلم موشن: 08_safe_check.js بيقرا compose.html وsfx.json بتوع الريل،
+    فبنفحص الفيلم نفسه: بناخد شرايح من المناطق الممنوعة ونقيس أعلى لومة فيها.
+    خط على خلفية غامقة = YMAX عالي؛ خلفية فاضية = قريب من لومة الخلفية."""
+    g = Gate("G7", "المنطقة الآمنة")
+    if not final:
+        g.add(WARN, "لا ملف نهائي — تخطّي")
+        return g
+    h = bg.lstrip("#")
+    bg_y = 0.2126 * int(h[0:2], 16) + 0.7152 * int(h[2:4], 16) + 0.0722 * int(h[4:6], 16)
+    step = max(1.0, (dur or 40.0) / 10.0)
+    ts = [round(0.4 + i * step, 2) for i in range(10)]
+    for name, crop in BANDS:
+        worst, at = 0.0, 0.0
+        for t in ts:
+            if t >= (dur or 40.0):
+                break
+            r = run(["ffmpeg", "-hide_banner", "-nostats", "-ss", "%.2f" % t, "-i", final,
+                     "-frames:v", "1", "-vf", crop + ",signalstats,"
+                     "metadata=print:key=lavfi.signalstats.YMAX", "-f", "null", "-"])
+            m = re.search(r"YMAX=([\d.]+)", r.stderr or "")
+            if m and float(m.group(1)) > worst:
+                worst, at = float(m.group(1)), t
+        lim = bg_y + 60      # الحبيبات بتوصل ~34؛ أي نص حقيقي بيكسر 200
+        g.add(OK if worst <= lim else BAD,
+              "%s: أعلى لومة %.0f (الحد %.0f)" % (name, worst, lim),
+              "عنصر داخل على %.1f ث — حرّكه جوّه" % at if worst > lim else "")
+    return g
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("work")
@@ -361,22 +414,28 @@ def main():
     ap.add_argument("--maxmb", type=float, default=29)
     ap.add_argument("--platform", default="ig", choices=sorted(LOUD),
                     help="هدف العلو: ig/tiktok/reels/shorts −14 · bilibili −16 · douyin −20.5 · cinema −23")
+    ap.add_argument("--kind", default="reel", choices=["reel", "motion", "web", "montage"],
+                    help="نوع المشروع: الريل لوحده هو اللي عنده src.mov وcut.json وفريمات")
     ap.add_argument("--json", default="gates.json")
     a = ap.parse_args()
     w = os.path.abspath(a.work)
 
     g_env_r = g_env()
     g0 = g_theme(w)
-    g1 = g_source(w)
-    g2 = g_cut(w)
+    g1 = g_source(w, a.kind)
+    g2 = g_cut(w, a.kind)
     cut_dur = dur_of(os.path.join(w, "cutz.mp4"))
-    g3 = g_captions(w, cut_dur)
-    g4 = g_frames(w, cut_dur)
+    g3 = g_captions(w, cut_dur, a.kind)
+    g4 = g_frames(w, cut_dur, a.kind)
     g5, final = g_audio(w, a.platform)
     g4c = g_black(final)
     g4d = g_open(final)
     g6 = g_package(w, final, a.maxmb)
-    gates = [g_env_r, g0, g1, g2, g3, g4, g4c, g4d, g5, g6] + ([g_safe(w)] if a.safe else [])
+    if a.kind == "reel":
+        g7 = [g_safe(w)] if a.safe else []
+    else:
+        g7 = [g_safe_film(final, dur_of(final))]
+    gates = [g_env_r, g0, g1, g2, g3, g4, g4c, g4d, g5, g6] + g7
 
     rows, blocked = [], 0
     for g in gates:
@@ -385,7 +444,7 @@ def main():
             blocked += 1
         rows.append({"id": g.id, "title": g.title, "level": g.level, "result": st, "items": g.items})
 
-    out = {"work": w, "blocked": blocked, "results": rows}
+    out = {"work": w, "kind": a.kind, "blocked": blocked, "results": rows}
     with open(os.path.join(w, a.json), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
 
@@ -394,9 +453,13 @@ def main():
         icon = {"pass": "✅", "warn": "⚠️", "fail": "❌"}[r["result"]]
         md.append("%s **%s %s** — %s" % (icon, r["id"], r["title"], r["result"]))
         for it in r["items"]:
-            if it["state"] != OK:
-                md.append("   - %s %s%s" % ("❌" if it["state"] == BAD else "⚠️", it["msg"],
-                                            (" · " + it["fix"]) if it["fix"] else ""))
+            if it["state"] == OK:
+                continue
+            if it["state"] == NA:
+                md.append("   - — %s" % it["msg"])
+                continue
+            md.append("   - %s %s%s" % ("❌" if it["state"] == BAD else "⚠️", it["msg"],
+                                        (" · " + it["fix"]) if it["fix"] else ""))
         md.append("")
     with open(os.path.join(w, "gates.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(md))

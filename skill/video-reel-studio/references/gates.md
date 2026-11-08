@@ -3,8 +3,13 @@
 كل بوابة إما **blocker** (توقف) أو **warn** (تنبيه). القاعدة: **fail-closed** —
 مفيش تسليم وأي blocker مفتوح. ومفيش "نكمّل ونشوف".
 
-المشغّل: `python scripts/gate_runner.py <work> [--safe] [--maxmb 29] [--platform ig]`
+المشغّل: `python scripts/gate_runner.py <work> [--kind reel|motion|web|montage] [--safe] [--maxmb 29] [--platform ig]`
 يكتب `<work>/gates.json` + `<work>/gates.md` ويخرج بـ 1 لو فيه blocker.
+
+**`--kind`**: الريل هو الوحيد اللي عنده `src.mov` و`cut.json` و`out/*.jpg`. لنوع تاني،
+G1 وG2 وG4 بتتعلّم **`—` (مش مطلوب)** بدل ما تفشل، والباقي بيفضل شغّال. الفيلم الموشن
+بياخد G7 بنسخة تانية: بنقص شرايح من المناطق الممنوعة من الملف النهائي ونقيس أعلى لومة فيها
+(نص حقيقي بيكسر 200، خلفية بحبيبات ~34) — مش سكربت الريل اللي بيقرا `compose.html`.
 
 ## البوابات الآلية (gate_runner)
 
