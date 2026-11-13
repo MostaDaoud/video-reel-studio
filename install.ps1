@@ -1,4 +1,4 @@
-# install.ps1 — install video-reel-studio for OpenCode on Windows
+﻿# install.ps1 — install video-reel-studio for OpenCode on Windows
 #   powershell -ExecutionPolicy Bypass -File install.ps1
 #   powershell -ExecutionPolicy Bypass -File install.ps1 -Global
 param([switch]$Global)
