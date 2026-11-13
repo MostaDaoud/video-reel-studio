@@ -48,6 +48,24 @@ inside the file, so an older install is named instead of failing mid-run:
 - **Mac-only Vision implementations** stay upstream; `preflight` reports whether the open replacements
   are installed, and both `43_textbox` and `11_behind_text` degrade with a printed line.
 
+## Runtime requirement — ffmpeg 7+ (measured, not assumed)
+
+Upstream's colour fix ends in `-movflags +prefer_icc`. That flag only does something if the ICC profile
+reaches the **muxer**, and on ffmpeg 6.0 it does not: the MJPEG decoder exposes the profile as *frame* side
+data (ffprobe shows `ICC profile, 588 bytes`), but nothing copies it to the stream's `coded_side_data`, so the
+muxer writes `colr nclx` and ignores `prefer_icc`.
+
+Verified on this machine:
+
+| build | reads ICC | writes `colr prof` |
+|---|---|---|
+| Gyan 6.0 | yes (frame side data) | **no** — `nclx` or nothing |
+| BtbN `N-125875-g5d4d3bdc61-20260731` | yes | **yes** |
+
+So `G5b` reports the container profile as a **warn**, and `preflight.py` carries an explicit
+**ffmpeg 7+** row: on 6.0 it prints the version and the reason, instead of letting the reel come out
+nine levels bright in Apple players with no explanation. The fix is the binary, not pipeline code.
+
 ## How to update this repo when upstream moves
 
 1. `git -C video-ad-editor fetch --tags && git -C video-ad-editor log --oneline HEAD..origin/main`
@@ -71,3 +89,4 @@ inside the file, so an older install is named instead of failing mid-run:
 | `gate_runner.py` on `work/mostafa-full` (reel) | same verdicts as before + new **G5b fail**: the delivered file had `color_transfer=unknown`, `color_space=bt470bg`, no `colr` box — the exact defect 6.5.2 fixes |
 | `gate_runner.py --kind review` on a synthetic review folder | 0 blocked, 1 warn (container `nclx`, i.e. Apple plays it brighter) |
 | `colr_box()` parser | `nclx` on two real files, empty on the ICC-less one, `prof` path exercised via `g_color` |
+| full chain on a 2026-07 ffmpeg (`03 → 04 → 06 → 06b → 28_cover`) | `colr prof` + bt709 on the delivery, **G5b pass**, 0 blockers |

@@ -59,7 +59,7 @@ Stills: [reel contact sheet](assets/img/reel-sheet.jpg) · [motion](assets/img/m
 | tool | why | install |
 |---|---|---|
 | Python 3.10+ | all pipeline scripts | `winget install Python.Python.3.12` / `brew install python` |
-| FFmpeg + ffprobe | cut, encode, master | `winget install Gyan.FFmpeg` / `brew install ffmpeg` |
+| FFmpeg 7+ and ffprobe | cut, encode, master, colour profile | `winget install Gyan.FFmpeg` / `brew install ffmpeg` |
 | Node 18+ | the renderer, capture, 3D | `winget install OpenJS.NodeJS` / `brew install node` |
 | Google Chrome | canvas rendering + covers | `google.com/chrome` |
 | Git | the production skills | `winget install Git.Git` / `brew install git` |

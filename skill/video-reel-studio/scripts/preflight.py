@@ -107,6 +107,17 @@ def main():
         p = has(exe)
         row(exe, "pass" if p else "fail", p or "غير موجود", hint)
 
+    # ffmpeg 7+ بيكتب ملف ألوان الحاوية (colr prof) — بلاه مشغّل أبل يعرض الريل أفتح 9 من 255.
+    # 6.0 بيقرا الـICC من الـJPEG بس ما يوصّله للموكسر، فـprefer_icc بيطلع nclx أو لا شي (قاسها هنا 13 نوفمبر).
+    if has("ffmpeg"):
+        r = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
+        v = (r.stdout or "").split("\n")[0].strip()
+        mj = __import__("re").search(r"ffmpeg version (\d+)\.", v)
+        ng = __import__("re").search(r"N-\d+-g[0-9a-f]+-(\d{8})", v)
+        ok = (int(mj.group(1)) >= 7) if mj else bool(ng and ng.group(1) >= "20250101")
+        row("ffmpeg 7+", "pass" if ok else "warn", v[:64] or "نسخة غير معروفة",
+            "" if ok else "نسخة 7+ بتكتب colr prof — G5b بتحذّر بدونه (أبل بيعرض أفتح)")
+
     b = bash_path()
     row("bash", "pass" if b else ("warn" if IS_WIN else "fail"), b or "غير موجود",
         "ثبّت Git for Windows" if IS_WIN else "bash موجود افتراضيًا")
