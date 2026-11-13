@@ -6,7 +6,7 @@
 
 **One sentence in. A finished vertical video out — and it refuses to hand it over while a gate is red.**
 
-An OpenCode skill that orchestrates a complete short-form video pipeline: brief → cut → Arabic captions → motion graphics → master → cover → thumbnails. It does not draw a single frame itself; it drives the five production skills underneath it and **audits the result at eleven checkpoints** before the file reaches you.
+An OpenCode skill that orchestrates a complete short-form video pipeline: brief → cut → Arabic captions → motion graphics → master → cover → thumbnails. It does not draw a single frame itself; it drives the six production skills underneath it and **audits the result at twelve checkpoints** before the file reaches you.
 
 `Windows` · `macOS` · `Linux` · `Arabic-first` · `no cloud` · `MIT`
 
@@ -16,12 +16,12 @@ An OpenCode skill that orchestrates a complete short-form video pipeline: brief 
 
 Every video tool can produce *a* file. Almost none can tell you whether the file is fit to publish. This one can:
 
-- **Eleven gates, fail-closed.** Missing frames, a caption after the video ends, a clipped headline, a −0.9 dBTP peak, a 62 MB delivery — each one stops the run with evidence and the exact fix.
+- **Twelve gates, fail-closed.** Missing frames, a caption after the video ends, a clipped headline, a −0.9 dBTP peak, a colour tag that would shift your red by 2%, a 62 MB delivery — each one stops the run with evidence and the exact fix.
 - **One prompt, no choreography.** You say «منتج الفيديو ده». It writes a brief, picks the mode, runs the pipeline, delegates the Arabic read and the visual read, and comes back with a file and a gate report.
 - **Brand once, reused forever.** Optional onboarding captures colours, font, tone, CTA and taboos into a brand file; every later video applies it with one command and a contrast gate.
 
 <p align="center">
-  <img src="assets/img/gates.jpg" alt="gate report: eleven gates, one warn, blocked 0" width="100%">
+  <img src="assets/img/gates.jpg" alt="gate report: twelve gates, one warn, blocked 0" width="100%">
 </p>
 
 ---
@@ -31,6 +31,7 @@ Every video tool can produce *a* file. Almost none can tell you whether the file
 | | mode | input | output |
 |---|---|---|---|
 | 🎙️ | `talking-reel` | one talking-head video (any orientation) | vertical reel, word-timed Arabic captions, motion, cover |
+| 📦 | `product-review` | product footage + a voice note or script | review reel: tracked callouts on the product, spec cards, price card, cut-out cover |
 | 🎞️ | `montage` | folder of speechless clips + a track | beat-synced 9:16 montage |
 | 🎧 | `podcast` | two or more cameras of one session | reels with a written hook, or a 16:9 episode |
 | ✨ | `motion` | a script or a topic | 60 fps motion film, 2D and 3D, no camera |
@@ -70,11 +71,12 @@ This skill orchestrates them; it does not contain them:
 ```bash
 mkdir -p ~/.config/opencode/skills && cd ~/.config/opencode/skills
 git clone https://github.com/majedphotos/video-ad-editor tmp
-# main skill + the four modes
-cp -r tmp/video-ad-editor tmp/montage-video tmp/motion-video tmp/podcast-video tmp/thumbnail-video .
+# main skill + the five modes
+cp -r tmp/video-ad-editor tmp/montage-video tmp/motion-video tmp/podcast-video tmp/thumbnail-video tmp/review-video .
 ```
 
-> Upstream is MIT. It ships as a Claude plugin; the five folders are the skills themselves and run as-is under OpenCode.
+> Upstream is MIT. It ships as a Claude plugin; the six folders are the skills themselves and run as-is under OpenCode.
+> This orchestrator is tested against **upstream 6.6.0** — `preflight.py` names any capability your copy is missing.
 
 ### 3. This skill
 
@@ -94,7 +96,7 @@ python  ~/.config/opencode/skills/video-reel-studio/scripts/preflight.py
 python3 ~/.config/opencode/skills/video-reel-studio/scripts/preflight.py   # macOS
 ```
 
-It checks python, ffmpeg, node, bash, Chrome, numpy/scipy, the five sibling skills, the Cairo font, and whether the brand folder is writable — and prints the right install command per OS. **G-2 is that check.**
+It checks python, ffmpeg, node, bash, Chrome, numpy/scipy, the six sibling skills, OpenAI/rembg extras, the Cairo and Ruqaa fonts, the upstream capability set (depth, soft matte, text box, SFX bank, storyboard, `inspire`, colour pipeline) and whether the brand folder is writable — and prints the right install command per OS. **G-2 is that check.**
 
 ---
 
@@ -105,6 +107,7 @@ Open OpenCode in a project and say any of these:
 | you say | what runs |
 |---|---|
 | «منتج الفيديو ده» · «حوّله لريل» | talking reel |
+| «اعمل مراجعة منتج» · «انبوكسنق» · «شورت تقني» | product review reel |
 | «اعمل مونتاج من المقاطع دي» | montage |
 | «اعمل ريلات من الحلقة» | podcast |
 | «اعمل فيديو موشن من النص ده» | motion film |
@@ -129,7 +132,7 @@ Every phase has a gate. If one fails: **one targeted fix, re-check that gate onl
 
 ---
 
-## The eleven gates
+## The twelve gates
 
 | gate | checks | blocks |
 |---|---|---|
@@ -139,7 +142,10 @@ Every phase has a gate. If one fails: **one targeted fix, re-check that gate onl
 | **G2** cut | segments exist, cut file duration matches | yes |
 | **G3** captions | first card ≤ 1.2 s, no empty cards, last card inside the video, ≤ 8 s, ≤ 9 words | yes / warn |
 | **G4** frames | rendered frames = duration × 30 (±2) | yes |
+| **G4c** black frames | no black open, no black run ≥ 0.6 s | yes / warn |
+| **G4d** opening | the picture moves inside the first two seconds | yes / warn |
 | **G5** audio | −15.5…−13 LUFS, true peak ≤ −1.0 dBTP | warn / yes |
+| **G5b** colour | tv range, full bt709 tags, sRGB `colr` box — the reel keeps your iPhone's colours | yes / warn |
 | **G6** package | ≤ 29 MB, cover 1080×1920, grid + phone preview, `.srt` present | yes / warn |
 | **G7** safe zone | no text under Instagram's chrome (runs the renderer twice and diffs) | yes |
 
@@ -147,7 +153,7 @@ Every phase has a gate. If one fails: **one targeted fix, re-check that gate onl
 python scripts/gate_runner.py "<work>" --safe   # writes gates.json + gates.md, exit 1 on any blocker
 ```
 
-Human-judgement gates sit on top of these, delegated to a **fresh-context agent** because the author is the worst judge of their own frames: an Arabic caption read, and a visual read of one contact sheet.
+Human-judgement gates sit on top of these, delegated to a **fresh-context agent** because the author is the worst judge of their own frames: an Arabic caption read, a **storyboard read — one shot per spoken line, approved before a single frame is rendered** — and, for product reviews, a numbers read of `qa.jpg`.
 
 ---
 
@@ -178,11 +184,15 @@ skill/video-reel-studio/
     onboarding.md           the seven brand questions
   scripts/
     preflight.py           environment check (G-2)
-    gate_runner.py         the eleven gates (G-2 … G7, incl. G4c black frames)
+    gate_runner.py         the twelve gates (G-2 … G8r, incl. G5b colour and G4c black frames)
     onboard.py             brand list/new/apply/check/card
   assets/brief.template.json
 install.sh · install.ps1
+docs/upstream.md           what the upstream baseline adds, and where each piece landed
 ```
+
+**Baseline:** tested against upstream **6.6.0**. The capability ledger — every 6.4 → 6.6 feature, the gate or
+pipeline step that absorbed it, and what we deliberately left upstream — is in [docs/upstream.md](docs/upstream.md).
 
 **Design rule:** deterministic work lives in scripts, judgement lives in instructions, and the two meet only at a gate.
 
@@ -191,8 +201,10 @@ install.sh · install.ps1
 ## Limits, honestly
 
 - The gates catch **mechanical** defects. "Is this hook strong" is not a gate; it is delegated or asked.
+- `product-review` needs product footage **and** a voice note or script — and a source for any price, discount or date. It will ask instead of inventing one.
 - `podcast` needs two real cameras. `montage` needs 10–20 clips. `web-demo` needs a URL. The skill will say so instead of faking it.
 - Generated b-roll and avatars need a `FAL_KEY`; that path is documented upstream, not bundled.
+- Soft hair mattes (`44_matte.py`) run ~13–15 s per frame on CPU and download a ~970 MB model once. Skip them and the flat reply still works with the sharper Apple matte.
 - The 3D path needs a working headless WebGL; on some machines `GL=gpu` is required and SwiftShader is the fallback.
 - Arabic transcription on Gulf dialect and English product names still needs a human pass — that is why G3b exists.
 
@@ -218,7 +230,7 @@ The full assessment — what each does well, where we differ, and the one integr
 
 MIT © 2026 Mostafa Daoud.
 
-Built on top of [`majedphotos/video-ad-editor`](https://github.com/majedphotos/video-ad-editor) (MIT) and its four sibling skills — the cutter, the caption engine, the motion engine and the renderer are theirs. This repository adds the orchestrator, the gate system, the brand layer, and the cross-platform packaging.
+Built on top of [`majedphotos/video-ad-editor`](https://github.com/majedphotos/video-ad-editor) (MIT, tested against **6.6.0**) and its five sibling skills — the cutter, the caption engine, the motion engine, the renderer and the product-review lane are theirs. This repository adds the orchestrator, the gate system, the brand layer, and the cross-platform packaging.
 
 Per-component notices — the upstream skills, the art-direction styles and the render engine — are in [THIRD_PARTY.md](THIRD_PARTY.md).
 

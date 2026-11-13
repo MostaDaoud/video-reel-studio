@@ -24,7 +24,7 @@ echo "  ✓ video-reel-studio"
 
 # dependency check
 missing=0
-for s in video-ad-editor montage-video motion-video podcast-video thumbnail-video; do
+for s in video-ad-editor montage-video motion-video podcast-video thumbnail-video review-video; do
   if [ -d "$DEST/$s" ] || [ -d "$HOME/.config/opencode/skills/$s" ]; then
     echo "  ✓ $s"
   else
@@ -37,7 +37,7 @@ if [ "$missing" = "1" ]; then
   echo
   echo "Install the production skills first:"
   echo "  git clone https://github.com/majedphotos/video-ad-editor /tmp/vae"
-  echo "  cp -r /tmp/vae/{video-ad-editor,montage-video,motion-video,podcast-video,thumbnail-video} \"$DEST/\""
+  echo "  cp -r /tmp/vae/{video-ad-editor,montage-video,motion-video,podcast-video,thumbnail-video,review-video} \"$DEST/\""
 fi
 
 PY=python3

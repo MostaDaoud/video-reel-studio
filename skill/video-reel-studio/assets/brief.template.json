@@ -2,6 +2,7 @@
   "ask": "",
   "mode": "talking-reel",
   "source": "",
+  "materials_dir": "",
   "promise": "",
   "audience": "",
   "length_s": [45, 90],
@@ -9,5 +10,6 @@
   "cta": "",
   "must_keep": [],
   "offer": "",
+  "offer_source": "",
   "notes": ""
 }

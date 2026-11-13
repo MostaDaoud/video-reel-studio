@@ -1,15 +1,16 @@
 ---
 name: video-reel-studio
-description: "Orchestrator that turns one sentence into a finished vertical video: writes the brief, picks the mode (talking reel, montage, podcast, motion film, web/app demo, cover only), runs the video-ad-editor pipeline end to end, delegates fresh-context Arabic caption and visual audits, and refuses delivery while an automated gate fails (source, cut, captions, frames, loudness, true peak, safe zone, package). Use when user says \"منتج الفيديو ده\", \"حوّله لريل\", \"اعمله كاب كت\", \"اعمل كوفر\", \"ثمبنيل يوتيوب\", \"اعمل لي إعلان\", \"اشرح الموقع ده بفيديو\", \"اعمل فيديو موشن من النص ده\", \"شغّل السكل كله\", \"make this a reel\", \"one prompt video\", or hands a file, folder or URL expecting a ready video without step-by-step instructions."
+description: "Orchestrator that turns one sentence into a finished vertical video: writes the brief, picks the mode (talking reel, product review, montage, podcast, motion film, web/app demo, cover only), runs the video-ad-editor pipeline end to end, delegates fresh-context Arabic caption and visual audits, and refuses delivery while an automated gate fails (source, cut, captions, frames, loudness, true peak, colour fidelity, safe zone, package). Use when user says \"منتج الفيديو ده\", \"حوّله لريل\", \"اعمله كاب كت\", \"اعمل كوفر\", \"ثمبنيل يوتيوب\", \"اعمل لي إعلان\", \"مراجعة منتج\", \"انبوكسنق\", \"شورت تقني\", \"اشرح الموقع ده بفيديو\", \"اعمل فيديو موشن من النص ده\", \"شغّل السكل كله\", \"make this a reel\", \"product review reel\", \"one prompt video\", or hands a file, folder or URL expecting a ready video without step-by-step instructions."
 ---
 
 # Video Reel Studio — مشرف واحد، بوابات صارمة
 
-السكل ده **مش بيرسم ومش بيقصّ بنفسه**. هو مشرف فوق خمس سكيلات موجودة:
+السكل ده **مش بيرسم ومش بيقصّ بنفسه**. هو مشرف فوق ست سكيلات موجودة:
 
 | السكل | يستخدمه المشرف لـ |
 |---|---|
 | `video-ad-editor` | كل السكربتات (`scripts/`)، ريل الكلام، الكابشن، الكوفر |
+| `review-video` | ريل مراجعة منتج بتعليق صوتي (`scripts/review/`) |
 | `montage-video` | مونتاج مقاطع بلا كلام على الإيقاع |
 | `podcast-video` | كاميرتين ← ريلات أو حلقة 16:9 |
 | `motion-video` | فيلم موشن من نص (محرّك `motion/`) |
@@ -52,6 +53,7 @@ python scripts/preflight.py        # ماك: python3
 | لو قال | الوضع |
 |---|---|
 | «منتج الفيديو ده» · «حوّله لريل» · «اقصّ السكتات» · «هات الكابشن» | `talking-reel` |
+| «مراجعة منتج» · «انبوكسنق» · «شورت تقني» · «إعلان منتج بصوتي» · يبعت لقطات منتج + نوت صوتي/سكربت | `product-review` |
 | «اعمل مونتاج من المقاطع دي» · «ركّبهم على الأغنية» | `montage` |
 | «اعمل ريلات من الحلقة» · «عندي كاميرتين» · «الحلقة كاملة» | `podcast` |
 | «اعمل فيديو موشن من النص ده» · «اشرح بالحركة» · «موشن جرافيكس» | `motion` |
@@ -69,12 +71,28 @@ python scripts/preflight.py        # ماك: python3
 | **-1** | **الهوية (اختياري): اسأل الأول — محفوظة / جديدة / افتراضي** | `theme.json` + `brand.md` | **G-1** |
 | 0 | اقرا الطلب واكتب `brief.json` | promise + mode + length | **G0** |
 | 1 | المصدر: نسخ، فحص فريمات، إضاءة | `src.mov` | **G1** |
-| 2 | قص + تفريغ + تصحيح + كابشن | `cut.json` `a.json` `caps.json` | **G2 · G3 · G3b** |
-| 3 | تصميم: حركات، مشاهد، معاينة | `scenes*.js` + `sheet.jpg` | **G4b** |
+| 2 | قص + تفريغ + تصحيح + كابشن (توقيت على الموجة) | `cut.json` `a.json` `caps.json` | **G2 · G3 · G3b** |
+| 3 | ستوري بورد (لقطة لكل سطر) ← تصميم ← معاينة | `storyboard/` + `scenes*.js` + `sheet.jpg` | **G4b** |
 | 4 | رسم كامل | `out/` = المدة×30 | **G4** |
-| 5 | ترميز + ماستر + ترجمة | `ad-master.mp4` `.srt` | **G5** |
+| 5 | ترميز + ماستر + ترجمة | `ad-master.mp4` `.srt` | **G5 · G5b** |
 | 6 | كفر + ثمبنيل + معاينة جوال | `cover.jpg` … | **G6 · G6b** |
 | 7 | تقرير التسليم | `gates.md` | **G8** |
+
+**وضع `product-review` مالوش الخط ده** — مساره §8 في `references/pipeline.md` (inspect ← plan ← voice ← track ←
+still ← render ← finish ← cover). بواباته: G3r (الخطة) وG8r (فريمات = مدة الصوت)، وG7 بنيوي من `plan.json`،
+وG6 بيقيس كفر المنتج `*-9x16.png` + `qa.jpg`. الباقي زي ما هو.
+
+### قبل الرسم الكامل — حاجتين مش اختياريتين
+
+1. **ستوري بورد:** `python S/32_midframes.py "W" --story` ← لقطة لكل سطر + `storyboard/index.html`.
+   اعرضه عليه، وسؤال واحد: «تمام نرسم؟ ولا فيه سطر تبي يتغيّر؟». صلّح وأعد `--story --lines <رقمه>`.
+2. **الصوت مربوط بالحركة:** `node S/04_render_frames.js "W" cues` ← `python S/05_sfx.py "W"`.
+   كل صوت لازم يلحق حركة حصلت على الشاشة (`MV.cue`)، مش رشّ على كل كلمة.
+
+**لحظات العمق** (2–3 بالريل، تخطّطها قبل الرسم): كلمة ورا الراس (`11_behind_text.js person` + `44_matte.py`)،
+كلمة مضيئة تنوّر، كاميرا تتحرك بين الطبقات، مربع على المكتوب (`43_textbox.py`) — المرجع
+`video-ad-editor/references/depth.md`. والكلمة اللي الراس يقطعها تنمد بكشيدة تجي على الراس بالظبط
+(`MV.text.headGap`) — **لا حرف ولا نقطة تنخفي وراه**.
 
 التفاصيل والأوامر الدقيقة ← `references/pipeline.md`.
 الأدوار ومتى تسلّم لوكيل ← `references/roles.md`.
@@ -125,7 +143,8 @@ python scripts/preflight.py        # ماك: python3
 اكتب `<work>/brief.json` قبل أي سكربت. القالب: `assets/brief.template.json`.
 
 - `promise` = اللي المشاهد بيفهمه في أول 3 ثواني. جملة واحدة. لو مش قادر تكتبها، يبقى إنت ما فهمتش الطلب.
-- `mode` من الستة. لو الطلب يحتمل وضعين، اختار **الأقرب لنية المستخدم** وقول له في جملة إيه اللي فهمته.
+- `mode` من السبعة. لو الطلب يحتمل وضعين، اختار **الأقرب لنية المستخدم** وقول له في جملة إيه اللي فهمته.
+  (`product-review` بريفه `plan.json` — بس لسه بيسأل عن `promise`، و`offer`/السعر لو فيه خصم.)
 - `length_s` = نطاق واقعي (ريل 45–90 ث؛ المقاطع الطويلة ← كذا ريل، مش ريل واحد).
 - `must_keep` = أسماء وأرقام ممنوع تنحذف أو تتحوّل.
 
@@ -159,10 +178,17 @@ python scripts/gate_runner.py "<work>" --safe
 5. **مفيش نشر ولا جدولة.** التسليم ملفات.
 6. **الكفر إلزامي** — أول فريم، ومقروء بحجم الجوال (`cover_phone.jpg`).
 7. **الحجم والعلو جزء من الجودة**: ≤29 ميقا، −14 LUFS، ذروة ≤ −1.0 dBTP.
+8. **لون تصويره ما يتغيّر**: الفريمات بـ`VF_FRAMES` والترميز بـ`06_encode.sh` (6.5.2+). ممنوع
+   `ffmpeg -vf fps=30` أو ترميز يدوي — بينقص الأحمر ~2٪ ويطلّع أفتح 9 من 255 على أبل. **G5b** بيقيس.
+9. **كل اسم أو رقم على الشاشة له مصدر**: أسماء طبقات المنتج من موقعه أو علبته، والسعر والتاريخ من
+   رابط تقدر تفتحه. الموقع يسمّي طبقتين من 8؟ ارسم 8 وسمّ الثنتين بلا اختراع.
+10. **ملاحظة نجحت = قاعدة**: قبل شغل المراجعة اقرا `python S/41_review.py taste show` وطبّقها.
 
 ## أنماط التشغيل
 
 - **ريل كلام** (الافتراضي): `talking-reel` — الفيديو الكامل يبقى ملء الشاشة، والرسوم في الحزام العلوي أو خلفه.
+- **مراجعة منتج**: `product-review` — تعليق صوتي فوق لقطات المنتج، خطوط تتبع القطعة، كرت خصم، كفر المنتج مقصوص.
+  الخطة `plan.json` والتوقيت على بدايات الطاقة. ممنوع تألّف سعر — و`qa.jpg` قبل التسليم.
 - **مقاطع بلا كلام**: `montage` — يحتاج 10–20 مقطعًا + مسار صوتي. لا يعيد استخدام اللقطة.
 - **بودكاست**: `podcast` — كاميرتان. الهوك المكتوب إلزامي.
 - **فيلم موشن**: `motion` — بلا تعليق افتراضيًا (`audio.py --no-bed --lufs -20`). 3D يحتاج `GL=gpu`.
@@ -175,7 +201,7 @@ python scripts/gate_runner.py "<work>" --safe
 
 ```
 المدة · القطع · الحجم · العلو · الذروة
-البوابات 7/7 ✅ (أو warn مقبول + سببه)
+البوابات: كلها ✅ (أو warn مقبول + سببه)
 الملفات: mp4 · srt · txt · cover.jpg
 ما اتنشرش حاجة.
 ```
@@ -197,3 +223,8 @@ python scripts/gate_runner.py "<work>" --safe
 | الكابشن متأخر/مقطوع | القص تغيّر بعد الكابشن | أعد `02_captions.py` ثم G3 |
 | ذروة عالية بعد الضغط | AAC يرفع القمة | `alimiter` في مسار الكفر أو `06c_loudfix.sh` |
 | التفريغ يهلوس | عامية/مصطلح إنجليزي | `02a_whisper_check.py --fix` ثم صحّح بعدد كلمات ثابت |
+| G5b: وسوم ناقصة / مفيش `colr` | ترميز يدوي أو نسخة قبل 6.5.2 | أعد `06_encode.sh` من 6.5.2+ (مش `ffmpeg` من عندك) |
+| قصّ الشعر ياخد ساعات | بيريف نت على المعالج | قله الوقت، شغّله بالخلفية، أو `--from-apple` للمقاطع اللي مفيش شي ورا الراس |
+| `43_textbox` بيرجع `nilError` | المحرّك العصبي مشغول بموديل تاني | استنى ثانية وأعد |
+| التتبع ما لقى القطعة | نقطة `anchors` على جزء غامق أو `seed` غلط | `review.py grid` لفريم واضح، واختار نقطة فيها تفاصيل |
+| FAL بيطلب مفتاح | صورة كفر محتاجة قصّ سحابي | سيبه — `rembg` بيشتغل على الجهاز بدونه |

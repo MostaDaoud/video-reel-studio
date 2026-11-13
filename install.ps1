@@ -18,7 +18,7 @@ Copy-Item $src $target -Recurse
 Write-Host "  OK video-reel-studio"
 
 $missing = @()
-foreach ($s in @("video-ad-editor","montage-video","motion-video","podcast-video","thumbnail-video")) {
+foreach ($s in @("video-ad-editor","montage-video","motion-video","podcast-video","thumbnail-video","review-video")) {
   if ((Test-Path (Join-Path $dest $s)) -or (Test-Path (Join-Path $HOME ".config\opencode\skills\$s"))) {
     Write-Host "  OK $s"
   } else {
@@ -31,7 +31,7 @@ if ($missing.Count -gt 0) {
   Write-Host ""
   Write-Host "Install the production skills first:"
   Write-Host "  git clone https://github.com/majedphotos/video-ad-editor $env:TEMP\vae"
-  Write-Host "  Copy-Item $env:TEMP\vae\video-ad-editor,$env:TEMP\vae\montage-video,$env:TEMP\vae\motion-video,$env:TEMP\vae\podcast-video,$env:TEMP\vae\thumbnail-video `"$dest`" -Recurse"
+  Write-Host "  Copy-Item $env:TEMP\vae\video-ad-editor,$env:TEMP\vae\montage-video,$env:TEMP\vae\motion-video,$env:TEMP\vae\podcast-video,$env:TEMP\vae\thumbnail-video,$env:TEMP\vae\review-video `"$dest`" -Recurse"
 }
 
 Write-Host ""

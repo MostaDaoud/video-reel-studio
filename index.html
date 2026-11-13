@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Video Reel Studio — one prompt, eleven gates</title>
+<title>Video Reel Studio — one prompt, twelve gates</title>
 <meta name="description" content="An OpenCode skill that turns one sentence into a finished vertical video, and refuses to deliver while a gate is red.">
 <meta property="og:title" content="Video Reel Studio">
-<meta property="og:description" content="One sentence in. A finished vertical video out. Eleven audit gates block the delivery.">
+<meta property="og:description" content="One sentence in. A finished vertical video out. Twelve audit gates block the delivery.">
 <meta property="og:image" content="assets/img/hero.jpg">
 <style>
   :root{--bg:#0B0C0C;--ink:#F4F2EE;--mut:#9AA5A2;--acc:#19C3AE;--card:#101615;--line:#1E2927}
@@ -65,9 +65,9 @@
   <div class="hero">
     <img src="assets/img/hero.jpg" alt="Video Reel Studio">
     <h1>One sentence in.<br>A finished reel out — <span class="t">if the gates pass.</span></h1>
-    <p class="lead">An OpenCode skill that orchestrates cut, Arabic captions, motion, master, cover and thumbnails — then audits the result at eleven checkpoints and refuses to deliver while one is red.</p>
+    <p class="lead">An OpenCode skill that orchestrates cut, Arabic captions, motion, master, cover and thumbnails — then audits the result at twelve checkpoints and refuses to deliver while one is red.</p>
     <div class="row">
-      <div class="pill">9 audit gates</div>
+      <div class="pill">12 audit gates</div>
       <div class="pill">Arabic-first captions</div>
       <div class="pill">Brand onboarding</div>
       <div class="pill">Windows · macOS · Linux</div>
@@ -111,7 +111,7 @@
   </section>
 
   <section id="gates">
-    <h2>Eleven gates, fail-closed</h2>
+    <h2>Twelve gates, fail-closed</h2>
     <p class="sub">The interesting part is not that it renders. It is that it stops.</p>
     <img src="assets/img/gates.jpg" alt="gate report" style="width:100%;border-radius:16px;border:1px solid var(--line)">
     <div style="height:22px"></div>
@@ -123,7 +123,10 @@
       <tr><td><b>G2</b> cut</td><td>segments exist, cut duration matches</td><td class="ok">yes</td></tr>
       <tr><td><b>G3</b> captions</td><td>first card ≤ 1.2 s · no empty cards · last inside video · ≤ 8 s · ≤ 9 words</td><td class="ok">yes</td></tr>
       <tr><td><b>G4</b> frames</td><td>rendered = duration × 30 (±2)</td><td class="ok">yes</td></tr>
+      <tr><td><b>G4c</b> black frames</td><td>no black open, no black run ≥ 0.6 s</td><td class="ok">yes / warn</td></tr>
+      <tr><td><b>G4d</b> opening</td><td>the picture moves inside the first two seconds</td><td class="ok">yes / warn</td></tr>
       <tr><td><b>G5</b> audio</td><td>−15.5…−13 LUFS · true peak ≤ −1.0 dBTP</td><td class="ok">warn / yes</td></tr>
+      <tr><td><b>G5b</b> colour</td><td>tv range · full bt709 tags · sRGB <code>colr</code> — your iPhone's colours survive</td><td class="ok">yes / warn</td></tr>
       <tr><td><b>G6</b> package</td><td>≤ 29 MB · cover 1080×1920 · grid + phone preview · .srt</td><td class="ok">yes / warn</td></tr>
       <tr><td><b>G7</b> safe zone</td><td>no text under Instagram's chrome (render twice + diff)</td><td class="ok">yes</td></tr>
     </table>
@@ -132,10 +135,10 @@
   <section id="install">
     <h2>Install</h2>
     <p class="sub">Prerequisites: Python 3.10+, FFmpeg, Node 18+, Google Chrome, Git. The production skills install separately (upstream, MIT).</p>
-    <pre><span style="color:#6F7B78"># 1 — the five production skills</span>
+    <pre><span style="color:#6F7B78"># 1 — the six production skills</span>
 git clone https://github.com/majedphotos/video-ad-editor /tmp/vae
 mkdir -p ~/.config/opencode/skills
-cp -r /tmp/vae/{video-ad-editor,montage-video,motion-video,podcast-video,thumbnail-video} ~/.config/opencode/skills/
+cp -r /tmp/vae/{video-ad-editor,montage-video,motion-video,podcast-video,thumbnail-video,review-video} ~/.config/opencode/skills/
 
 <span style="color:#6F7B78"># 2 — this skill</span>
 git clone https://github.com/MostaDaoud/video-reel-studio /tmp/vrs
