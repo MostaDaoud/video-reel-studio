@@ -1,6 +1,6 @@
 {
-  "note": "حزمة ستايلات مقتبسة فكريًا من Lemo-Opuscar (MIT code / CC BY 4.0 films). كل تعريف هنا مكتوب لصيغة محرّكنا، مش منقول. الفيديوهات الأصلية ما اتنسخش.",
-  "credit": "Adapted from Lemo-Opuscar — https://github.com/lemomo-ai/lemo-opuscar (MIT code, CC BY 4.0 films). Original briefs by LemoLab.",
+  "note": "حزمة ستايلات: عشرة مقتبسة فكريًا من Lemo-Opuscar (MIT code / CC BY 4.0 films)، وتلاتة showcase مجرّدة من كتالوجين فيديو عامّين (MIT). كل تعريف هنا مكتوب لصيغة محرّكنا، مش منقول. الفيديوهات الأصلية ما اتنسخش.",
+  "credit": "Styles 1–10 adapted from Lemo-Opuscar — https://github.com/lemomo-ai/lemo-opuscar (MIT code, CC BY 4.0 films; original briefs by LemoLab). Styles 11–13 abstracted from awesome-opus5-5-videos and awesome-kimi-k3-1-videos (MIT).",
   "styles": [
     {
       "id": "watercolor",
@@ -111,6 +111,39 @@
       "motion": ["misregister", "overprint", "stamp"],
       "sound": "طبع ومعدن",
       "scenes": ["طبقتين لون بتزحزح", "نص ينطبع بختم", "شكل بيتكرر كورد"]
+    },
+    {
+      "id": "procedural-3d",
+      "name_ar": "جسم ثلاثي الأبعاد",
+      "name_en": "Procedural 3D",
+      "when": "منتج، مادة، قطعة واحدة تستاهل تتشاف من كل ناحية — بلا كلام ولا كابشن.",
+      "palette": { "bg": "#07080A", "ink": "#F3F5F7", "acc": "#6EA8FF", "alt": "#1A2230" },
+      "type": { "display": "Inter", "body": "IBM Plex Sans Arabic" },
+      "motion": ["orbit", "material-sweep", "bloom", "breathing-loop"],
+      "sound": "هبّة هواء + نبض واطي",
+      "scenes": ["جسم واحد يدور والضوء يمسح حافته", "الكاميرا تقرب لنقطة واحدة لمّاعة", "الكلمة تطلع من انعكاس المادة"]
+    },
+    {
+      "id": "kinetic-loop",
+      "name_ar": "لوب حركي",
+      "name_en": "Kinetic Loop",
+      "when": "هوك قصير، ستوري، شاشة سوشيال بلا صوت — وآخر فريم = أول فريم.",
+      "palette": { "bg": "#F4F2EE", "ink": "#121212", "acc": "#E24A2B", "alt": "#9AA0A6" },
+      "type": { "display": "Inter", "body": "IBM Plex Sans Arabic" },
+      "motion": ["mask-reveal", "spring-morph", "beat-cut", "perfect-loop"],
+      "sound": "نقرات على النبضة",
+      "scenes": ["شكل واحد يتحوّل بين 8 حالات", "الكلمة تنكشف بقناع على الضربة", "اللقطة الأخيرة تطابق الأولى بالبكسل"]
+    },
+    {
+      "id": "technical-teardown",
+      "name_ar": "تفكيك تقني",
+      "name_en": "Technical Teardown",
+      "when": "جهاز، منتج، مكوّنات — لما القيمة في «إيه اللي جواه».",
+      "palette": { "bg": "#0F1318", "ink": "#E9EFF4", "acc": "#FF7A45", "alt": "#2A333C" },
+      "type": { "display": "IBM Plex Sans Arabic", "body": "IBM Plex Sans Arabic" },
+      "motion": ["explode", "dotted-leader", "label-on-word", "reassemble"],
+      "sound": "تكات معدنية + هواء",
+      "scenes": ["الألواح تنفك واحدة واحدة بارتداد", "خط منقّط لاسم الطبقة لحظة نطقها", "كل حاجة ترجع مكانها بضربة واحدة"]
     }
   ]
 }

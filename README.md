@@ -182,9 +182,11 @@ skill/video-reel-studio/
     gates.md               every gate, threshold, and the fix loop
     roles.md               six roles, when to delegate, delegation prompt
     onboarding.md           the seven brand questions
+    showcase-brief.md      the six-block brief behind "insane" films, ten recipes, the ban list
   scripts/
     preflight.py           environment check (G-2)
     gate_runner.py         the twelve gates (G-2 … G8r, incl. G5b colour and G4c black frames)
+    idea_bank.py           attributed search over two MIT video catalogues (read-only)
     onboard.py             brand list/new/apply/check/card
   assets/brief.template.json
 install.sh · install.ps1
@@ -214,6 +216,8 @@ pipeline step that absorbed it, and what we deliberately left upstream — is in
 
 | project | what it is | relation to this repo |
 |---|---|---|
+| [yihui-dev/awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) | **703** viral 3D/motion films with **623 prompts** (MIT) | the idea bank behind `idea_bank.py` and the showcase recipes — ideas only, prompts never pasted |
+| [yihui-dev/awesome-kimi-k3-1-videos](https://github.com/yihui-dev/awesome-kimi-k3-1-videos) | **187** creations, 19 published prompts (MIT) | second idea source; mostly gallery + credits |
 | [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) | 66 code-drawn film **styles**, each a `STYLE.md` + a demo film | art-direction menu we borrow *briefs* from, never code or frames |
 | [0xsline/OpenChatCut](https://github.com/0xsline/OpenChatCut) | local-first **editor** with a real timeline, driven by agents over MCP | the manual-edit escape hatch — we ship a finished MP4, it ships an editable project |
 | [athemeroy/awesome-claude-5-5-videos](https://github.com/athemeroy/awesome-claude-5-5-videos) | **research + gallery**: 424 source posts, measured style/colour/cost | evidence for production choices, not a dependency |

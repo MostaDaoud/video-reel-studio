@@ -27,12 +27,25 @@ here anyway. The bank is **not** redistributed in this repository.
 
 ## Art-direction styles
 
-`skill/video-reel-studio/styles/pack.json` contains ten styles **written from scratch**
-in this project's own grammar (palette, type, motion verbs, sound, scene seeds). They are
+`skill/video-reel-studio/styles/pack.json` contains thirteen styles **written from scratch**
+in this project's own grammar (palette, type, motion verbs, sound, scene seeds). Ten are
 *inspired by* the style catalogue of
 [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) (MIT code, CC BY 4.0
 films). No film, frame or `STYLE.md` from that project is copied here. Any future use of
 their footage requires credit to **LemoLab**, a link, and a statement of changes.
+
+## Idea catalogues
+
+`references/showcase-brief.md` and `scripts/idea_bank.py` draw on two MIT-licensed catalogues
+of LLM-made videos: [awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos)
+(703 videos, 623 prompts) and
+[awesome-kimi-k3-1-videos](https://github.com/yihui-dev/awesome-kimi-k3-1-videos)
+(187 videos, 19 published prompts). Neither repository is vendored, and no prompt text is
+reproduced in this repository or copied into work folders. What is used is the *pattern* —
+brief structure, beat mapping, quality bans — rewritten in this engine's grammar.
+`idea_bank.py` prints at most a 400-character excerpt at runtime, always with the creator's
+name and link. Videos, posters and post text remain the property of their creators; see each
+repository's `MEDIA-RIGHTS.md`.
 
 ## Render engine
 
