@@ -126,3 +126,18 @@ than one that is checkable.
 **Product review** is the only mode with no footage anywhere in this repo. The shot spec is 10 s on a
 table, 10 s of detail passes, 10 s in use, 5 s clean hero, no talking — the mode adds tracked callouts
 and a voiceover. Until that exists, the roster names it and nothing pretends otherwise.
+
+---
+
+## 11. The caption style assumed every caption was Arabic
+
+The `chunk` style anchors the first word at the **right** edge and walks left. That is correct for Arabic
+and reverses every Latin caption: an English card reading “content that” rendered as “that content”.
+
+Found on the first English build in this repo. The first preview looked like a typo in the caption data;
+it was the layout. The patch picks the direction from the text itself — a capsule containing Arabic
+codepoints keeps RTL, everything else lays out LTR — so the Arabic-first case the style was written for
+is unchanged. See [`patches/compose-ltr-captions.patch`](../patches/compose-ltr-captions.patch).
+
+**Lesson:** "Arabic-first" is a design decision, not a licence to hardcode direction in a renderer.
+

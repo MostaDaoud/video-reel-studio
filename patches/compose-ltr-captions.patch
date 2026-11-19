@@ -1,0 +1,18 @@
+--- a/scripts/compose.REFERENCE.html
++++ b/scripts/compose.REFERENCE.html
+@@ -335,10 +335,12 @@
+   if(window.CAP_Y_AT){ const yy=window.CAP_Y_AT(t); if(yy) by=yy; }
+   X.save(); X.globalAlpha=ease(pr(t,ch.s-0.04,ch.s+0.14))*(1-pr(t,ch.end-0.1,ch.end));
+   sh(30,10,0.24); X.fillStyle=cBG(0.95); rr(540-bw/2,by-h/2,bw,h,h/2); X.fill(); nsh();
+-  X.textAlign='right'; X.textBaseline='middle';
+-  let x=540+total/2;
++  /* Latin capsules must read left-to-right; Arabic keeps right-to-left. */
++  const LTR=!/[\u0600-\u06FF]/.test(ws.map(o=>o.w.t).join(''));
++  X.textAlign=LTR?'left':'right'; X.textBaseline='middle';
++  let x=LTR?540-total/2:540+total/2;
+   for(const i of ws){ const said=t>=i.w.s, act=said&&t<i.w.e+0.08;
+-    X.fillStyle=act?ACC:(said?INK:cINK(0.42)); X.fillText(i.w.t,x,by+3); x-=i.ww+gap; }
++    X.fillStyle=act?ACC:(said?INK:cINK(0.42)); X.fillText(i.w.t,x,by+3); x+=(LTR?1:-1)*(i.ww+gap); }
+   X.restore(); }
+ function caption(t){
+   if(SCENES.some(sc=>sc.nocap&&t>=sc.s&&t<sc.e)) return;   /* {s,e,m,nocap:true}: مشهد بلا كابشن — لما اللوحة فوق فيها النص نفسه (قرار المستخدم 8 سبتمبر) */
