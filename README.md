@@ -44,6 +44,7 @@ Every video tool can produce *a* file. Almost none can tell you whether the file
 |---|---|---|
 | **30 s capability showcase** | one piece through the whole system — hook, wave-synced captions, depth cutout (word behind the head), motion bank, 3D, web demo, data, all seven modes · 12/12 gates | [▶ showcase-30.mp4](assets/video/showcase-30.mp4) |
 | **Podcast + montage · 14 s** | the two modes the 30 s film only named — waveform, word-synced captions, eight beat cuts from one 4K take · 12/12 gates | [▶ showcase-modes.mp4](assets/video/showcase-modes.mp4) |
+| **Podcast promo · 22 s** | the planner/executor/auditor loop, end to end — Claude planned, DeepSeek built, Claude audited · 41-word captions · 12/12 gates | [▶ podcast-promo.mp4](assets/video/podcast-promo.mp4) |
 | **27 s showcase trilogy** | three 3D films from one 120 BPM system — exploded teardown, object loop, data city · 60 fps · −14 LUFS · 0 gate blockers | [▶ showcase.mp4](assets/video/showcase.mp4) |
 | **73 s Arabic reel** | captions, motion, 3D beat, cover, 28 MB master | [▶ reel.mp4](assets/video/reel.mp4) |
 | **Motion film, no narration** | 60 fps engine + `stage3D` bloom | [▶ motion.mp4](assets/video/motion.mp4) |
