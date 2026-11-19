@@ -42,6 +42,7 @@ Every video tool can produce *a* file. Almost none can tell you whether the file
 
 | sample | what it proves | file |
 |---|---|---|
+| **30 s capability showcase** | one piece through the whole system — hook, wave-synced captions, motion bank, 3D, web demo, data, all seven modes · 12/12 gates | [▶ showcase-30.mp4](assets/video/showcase-30.mp4) |
 | **27 s showcase trilogy** | three 3D films from one 120 BPM system — exploded teardown, object loop, data city · 60 fps · −14 LUFS · 0 gate blockers | [▶ showcase.mp4](assets/video/showcase.mp4) |
 | **73 s Arabic reel** | captions, motion, 3D beat, cover, 28 MB master | [▶ reel.mp4](assets/video/reel.mp4) |
 | **Motion film, no narration** | 60 fps engine + `stage3D` bloom | [▶ motion.mp4](assets/video/motion.mp4) |
