@@ -389,11 +389,14 @@ def g_audio(w, platform="ig", kind="reel"):
     cand = [os.path.join(w, "ad-master-cover.mp4"), os.path.join(w, "ad-master.mp4"), os.path.join(w, "ad-final.mp4")]
     if kind == "review":
         cand = [p for p in (review_final(w),) if p]
+    if kind == "motion":
+        # فيلم الموشن بينزل في renders/: final.mp4 (بالصوت) أو video.mp4 (فريمات)
+        cand = [os.path.join(w, "renders", f) for f in ("final.mp4", "final-nobed.mp4", "video.mp4")]
     f = next((p for p in cand if os.path.exists(p)), None)
     if not f:
-        what = "<name>-final.mp4" if kind == "review" else "ad-master / ad-master-cover"
+        what = "<name>-final.mp4" if kind == "review" else ("renders/final.mp4" if kind == "motion" else "ad-master / ad-master-cover")
         g.add(BAD, "لا ملف نهائي (%s)" % what,
-              "شغّل review.py finish" if kind == "review" else "شغّل 06b_master.sh")
+              "شغّل review.py finish" if kind == "review" else ("شغّل audio.py" if kind == "motion" else "شغّل 06b_master.sh"))
         return g, None
     target = LOUD.get(platform, -14.0)
     l = loudness(f)
@@ -519,6 +522,15 @@ def g_package(w, final, maxmb, kind="reel"):
         size = os.path.getsize(final) / 1048576.0
         g.add(OK if size <= maxmb else WARN, "الحجم %.1f ميقا (الحد %.0f)" % (size, maxmb),
               "28_cover.py --first يضغط تلقائياً" if kind != "review" else "review.py finish بيعمل نسخة خفيفة — سلّمها لو الأصل فوق الحد")
+    if kind == "motion":
+        # فيلم الموشن مالوش كفر ولا srt — التسليم هو renders/final.mp4
+        if final:
+            g.add(OK, "التسليم: %s (%.1f ث)" % (os.path.basename(final), dur_of(final)))
+        g.add(OK if os.path.exists(os.path.join(w, "renders", "video.mp4")) else WARN,
+              "فريمات video.mp4", "شغّل render.js all")
+        g.add(OK if os.path.exists(os.path.join(w, "timeline.json")) else WARN, "timeline.json")
+        g.skip("مفيش كفر أو .srt في وضع الموشن — السوشيال بياخد الفيلم زي ما هو")
+        return g
     if kind == "review":
         cov = review_cover(w)
         if not cov:
