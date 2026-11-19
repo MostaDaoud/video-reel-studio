@@ -194,10 +194,17 @@ skill/video-reel-studio/
   assets/brief.template.json
 install.sh · install.ps1
 docs/upstream.md           what the upstream baseline adds, and where each piece landed
+docs/build-log.md          what broke during real builds, and how each fix was verified
+patches/                   unified diffs for four upstream 6.6.0 defects
+samples/post-package/      a full post package: four covers + caption copy
 ```
 
 **Baseline:** tested against upstream **6.6.0**. The capability ledger — every 6.4 → 6.6 feature, the gate or
 pipeline step that absorbed it, and what we deliberately left upstream — is in [docs/upstream.md](docs/upstream.md).
+
+Two more things worth reading before you trust a green build: [docs/build-log.md](docs/build-log.md)
+(ten defects found by real builds, including one where the tool printed success while missing every
+target) and [patches/](patches/) (the same fixes as diffs you can apply).
 
 **Design rule:** deterministic work lives in scripts, judgement lives in instructions, and the two meet only at a gate.
 

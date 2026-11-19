@@ -1,0 +1,29 @@
+--- a/scripts/compose.REFERENCE.html
++++ b/scripts/compose.REFERENCE.html
+@@ -40,6 +40,10 @@
+ ['X','BG','INK','ACC','CLAY','MUT','FONT'].forEach(n=>{ try{ Object.defineProperty(window,n,{get:new Function('return '+n),configurable:true}); }catch(e){} });
+ function init(d){
+   CAPS=d.cards;VEND=d.total;OUTRO=d.outro;DUR=VEND+OUTRO;
++  /* 6.6.1: clamp captions to their own timeline. A stray word timestamp used to paint a card
++     past VEND (over the next chapter) because _chunks() trusted the raw data. */
++  if(VEND>0) CAPS.forEach(c=>{ c.s=cl(c.s,0,VEND); c.e=cl(c.e,c.s,VEND);
++    (c.w||[]).forEach(w=>{ w.s=cl(w.s,c.s,c.e); w.e=cl(w.e,w.s,c.e); }); });
+   BEHIND=d.behind||null;
+   const t=d.theme||{}; THEME_RAW=t;
+   BOUNCE=!!(t.motion&&t.motion.bounce);
+@@ -324,6 +328,7 @@
+   out.forEach((a,i)=>{ const b=out[i+1]; a.end=b?(b.s-a.e<0.8?b.s:a.e+0.45):a.e+0.6; });   /* المستخدم 20 أكتوبر: يقعد 0.45 ث لو بعده سكتة */
+   return out; }
+ function capChunk(t){
++  if(t>=VEND) return;
+   const ch=_chunks().find(c=>t>=c.s-0.04&&t<c.end); if(!ch) return;
+   const r=_capRest(CAPS[ch.ci],t); if(!r) return;   /* 6.0: الكلمات اللي طلعت «ورا الراس/طبقات» ما تنعاد */
+   const keep=new Set(r.w), src=ch.w.filter(w=>keep.has(w)); if(!src.length) return;
+@@ -341,6 +346,7 @@
+     X.fillStyle=act?ACC:(said?INK:cINK(0.42)); X.fillText(i.w.t,x,by+3); x-=i.ww+gap; }
+   X.restore(); }
+ function caption(t){
++  if(t>=VEND) return;   /* 6.6.1: no caption frame can paint over the outro */
+   if(SCENES.some(sc=>sc.nocap&&t>=sc.s&&t<sc.e)) return;   /* {s,e,m,nocap:true}: مشهد بلا كابشن — لما اللوحة فوق فيها النص نفسه (قرار المستخدم 8 سبتمبر) */
+   /* لا تكرّر: لو الكلام يمرّ ورا الشخص بهاللحظة، كرت الكابشن يختفي */
+   if(BEHIND&&PRS_OK&&isFull(vrect(t))&&BEHIND.lines.some(l=>t>=l.s&&t<=l.e&&!BEHIND_OFF.includes(l.card))) return;

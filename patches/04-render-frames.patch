@@ -1,0 +1,13 @@
+--- a/scripts/04_render_frames.js
++++ b/scripts/04_render_frames.js
+@@ -63,6 +63,10 @@
+   if(!isFinite(dur)||Math.round(dur*FPS)<=0){
+     console.error('❌ المدة غلط ('+dur+') — caps.total='+caps.total+' · outro='+CFG.outro+'. افحص caps.json وsfx.json قبل الرسم.');
+     process.exit(1); }
++  /* 6.6.1: the film is capped at caps.total+outro. If the base is longer, frames are dropped silently. */
++  if(NVF && dur < NVF/FPS - 0.06){
++    console.log('⚠ المدة المحسوبة '+dur.toFixed(2)+'ث أقصر من المصدر '+(NVF/FPS).toFixed(2)+'ث — خلي caps.total = مدة الفيلم.');
++  }
+   const b=await puppeteer.launch({executablePath:CHROME,headless:'new',
+     args:['--no-sandbox','--allow-file-access-from-files','--font-render-hinting=none','--force-color-profile=srgb']});
+   const p=await b.newPage();
