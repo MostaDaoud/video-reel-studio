@@ -90,3 +90,18 @@ nine levels bright in Apple players with no explanation. The fix is the binary, 
 | `gate_runner.py --kind review` on a synthetic review folder | 0 blocked, 1 warn (container `nclx`, i.e. Apple plays it brighter) |
 | `colr_box()` parser | `nclx` on two real files, empty on the ICC-less one, `prof` path exercised via `g_color` |
 | full chain on a 2026-07 ffmpeg (`03 → 04 → 06 → 06b → 28_cover`) | `colr prof` + bt709 on the delivery, **G5b pass**, 0 blockers |
+
+## Local engine patches we carry (2026-11-19)
+
+Upstream 6.6.0 still has four defects that the twelve gates can catch but not fix. They are patched in the
+installed `video-ad-editor` (`scripts/`) and recorded here so a fresh install knows what to expect:
+
+| file | defect | patch |
+|---|---|---|
+| `06c_loudfix.sh` | loses `colr prof` (`nclx`), misses TP (-0.6) and loudness (-15.2) | `+prefer_icc`, no `linear=true`, two `loudnorm` passes, resample inside the graph + `alimiter level=disabled` |
+| `compose.REFERENCE.html` | captions can paint past their card / past `VEND` | clamp cards to `[0,VEND]` and words to their card at load; `caption()`/`capChunk()` return at `t>=VEND` |
+| `04_render_frames.js` | silently drops base frames when `caps.total+outro` is shorter than the source | prints the computed vs source duration |
+| `06c` output rate | `-ar 48000` resampled after the limiter, raising the peak | resample before the limiter; keep 48 kHz |
+
+Until these land upstream, `G5b` on a `06c`-rescued file will fail for the right reason: the file really is
+`nclx`. Use `06b_master.sh` (already correct) or the patched `06c`.
